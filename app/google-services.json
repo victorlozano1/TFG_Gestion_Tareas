@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "751077703427",
+    "project_id": "tfggestiondetareas",
+    "storage_bucket": "tfggestiondetareas.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:751077703427:android:1696d7bb4f0c0bb0c0f336",
+        "android_client_info": {
+          "package_name": "com.tfg.gestiondetareas"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1UBuaLwkNp2Qm7ju9QtdH0Mxe66hgR34"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

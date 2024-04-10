@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Gestion de tareas</string>
+    <string name="edtNom">Nombre de usuario</string>
+    <string name="edtCon">Introduzca su contraseña</string>
+    <string name="btnCrearCuenta">Crear cuenta</string>
+    <string name="btnSalir">Salir de la aplicación</string>
+    <string name="btnIniciarSesion">Iniciar sesión</string>
+    <string name="btnRegistrar">Registrar cuenta</string>
+    <string name="btnCancelar">Cancelar</string>
+    <string name="tvCrearCuenta">Cree su cuenta</string>
+    <string name="toastRegIncorrecto">Debe rellenar todos los campos para poder registrarse</string>
+    <string name="edtCorreo">Correo electronico</string>
+    <string name="toastiniciosesincorrecto">Debe rellenar los campos para poder iniciar sesion</string>
+</resources>
