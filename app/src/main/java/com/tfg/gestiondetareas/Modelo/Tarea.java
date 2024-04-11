@@ -1,23 +1,28 @@
 package com.tfg.gestiondetareas.Modelo;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class Tarea {
 
     private String nombre;
     private String descripcion;
-    private Date Fecha_publicacion;
+    private String Fecha_publicacion;
 
     private String nombre_publicador;
 
     private boolean Completada;
 
-    public Tarea(String nombre, String descripcion, Date fecha_publicacion, String nombre_publicador) {
+
+
+    public Tarea(String nombre, String descripcion, String fecha_publicacion, String nombre_publicador, boolean completo) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.Fecha_publicacion = fecha_publicacion;
         this.nombre_publicador = nombre_publicador;
-        this.Completada = false;
+        this.Completada = completo;
     }
 
     public String getNombre() {
@@ -36,11 +41,13 @@ public class Tarea {
         this.descripcion = descripcion;
     }
 
-    public Date getFecha_publicacion() {
+    public String getFecha_publicacion() {
+
+
         return Fecha_publicacion;
     }
 
-    public void setFecha_publicacion(Date fecha_publicacion) {
+    public void setFecha_publicacion(String fecha_publicacion) {
         Fecha_publicacion = fecha_publicacion;
     }
 

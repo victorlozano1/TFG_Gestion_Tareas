@@ -7,11 +7,24 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <TextView
+        android:id="@+id/tvBienvenida"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="25dp"
+        android:fontFamily="@font/aclonica"
+        android:text="@string/mensajeBienvenida"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
         android:id="@+id/edtCorreoInit"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="-223dp"
+        android:layout_marginTop="-320dp"
         android:ems="10"
         android:hint="@string/edtCorreo"
         android:inputType="text"
@@ -36,29 +49,32 @@
         android:id="@+id/btnCrearCuenta"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="64dp"
+        android:backgroundTint="@color/colorBotones"
         android:text="@string/btnCrearCuenta"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnIniciarSesion"
+        app:layout_constraintTop_toBottomOf="@+id/edtContr" />
 
     <Button
         android:id="@+id/btnSalir"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="116dp"
+        android:layout_marginBottom="67dp"
+        android:backgroundTint="@color/colorBotones"
         android:text="@string/btnSalir"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/btnIniciarSesion"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="64dp"
+        android:backgroundTint="@color/colorBotones"
         android:text="@string/btnIniciarSesion"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edtContr" />
 </androidx.constraintlayout.widget.ConstraintLayout>

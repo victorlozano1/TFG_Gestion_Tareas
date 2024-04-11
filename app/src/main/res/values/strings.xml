@@ -17,4 +17,7 @@
     <string name="HintDescripcionNuevaTarea">Descripción de la tarea</string>
     <string name="botonAñadir">Añadir</string>
     <string name="tituloCrearTarea">Crear nueva tarea</string>
+    <string name="chCompleto">Marcar como completada</string>
+    <string name="mensajeBienvenida">Bienvenido a tu gestor de tareas</string>
+    <string name="ChiquiIbai">Lista de Tareas</string>
 </resources>

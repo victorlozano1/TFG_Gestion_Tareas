@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -36,7 +37,7 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull TareaAdapter.ViewHolder holder, int position) {
 
         holder.Tarea.setText(listaTareas.get(position).getNombre());
-        holder.Fecha.setText(listaTareas.get(position).getFecha_publicacion().toString());
+        holder.Fecha.setText(listaTareas.get(position).getFecha_publicacion());
         holder.publicador.setText(listaTareas.get(position).getNombre_publicador());
 
 
@@ -50,11 +51,13 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.ViewHolder> 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView Tarea, Fecha, publicador;
+        CheckBox completado;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             Tarea=itemView.findViewById(R.id.tvNomTarea);
             Fecha=itemView.findViewById(R.id.tvDesc);
             publicador=itemView.findViewById(R.id.tvPublicador);
+            completado=itemView.findViewById(R.id.chCompleto);
 
         }
     }

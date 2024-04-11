@@ -15,8 +15,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.tfg.gestiondetareas.MainActivity;
 import com.tfg.gestiondetareas.R;
 import com.tfg.gestiondetareas.registrarCuenta;
@@ -35,8 +39,10 @@ public class cntrRegistrarCuentas {
   //Ruta donde se encuentra los usuarios
   public final String ruta_usuarios="Usuarios";
 
+    String nombreUsu=null;
     Context contexto;
     private FirebaseAuth auth;
+    public cntrRegistrarCuentas() {}
     public cntrRegistrarCuentas(Context contexto) {
 
         this.contexto=contexto;
@@ -94,10 +100,12 @@ public class cntrRegistrarCuentas {
 
         auth.signInWithEmailAndPassword(username, password)
                     .addOnCompleteListener(task -> {
+                        //Si se cumple la condición, se inicia la sesión
                         if (task.isSuccessful()) {
                             // Inicio de sesión exitoso
                             Toast.makeText(contexto, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show();
                             Intent vistaIntent= new Intent().setClass(contexto, vistaPrincipal.class);
+                            //Se pone un putextra con el nombre del usuario que se ha logado (se utilizará para algunas gestiones)
                             contexto.startActivity(vistaIntent);
                         }
 
@@ -106,6 +114,50 @@ public class cntrRegistrarCuentas {
                             Toast.makeText(contexto, R.string.toastErrorInicioSesion, Toast.LENGTH_SHORT).show();
                         }
                     });
+        }
+
+
+        //Método que recoge el usuario que esta logado dentro de la Aplicación
+        public String recogerUsuarioLogado() {
+
+
+
+            FirebaseAuth auth = FirebaseAuth.getInstance();
+            FirebaseUser usuario = auth.getCurrentUser();
+            DatabaseReference db = FirebaseDatabase.getInstance(urldb).getReference().child(ruta_usuarios);
+
+            if(usuario != null) {
+                //Consulta que recoge el nombre del usuario logado mediante el correo
+               String correo = usuario.getEmail();
+               Query consulta = db.orderByChild("Correo").equalTo(correo);
+
+
+                consulta.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            nombreUsu = dataSnapshot.child("nombre_usuario").getValue(String.class);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+
+
+            }
+
+            else {
+
+                Log.i("ErroAU", "No hay usuario autentificado");
+            }
+
+
+
+            return nombreUsu;
         }
     }
 

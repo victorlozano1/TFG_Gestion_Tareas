@@ -37,6 +37,8 @@ public class vistaPrincipal extends AppCompatActivity {
     ArrayList<Tarea> listaTareas;
     TareaAdapter Adaptador;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,10 +51,11 @@ public class vistaPrincipal extends AppCompatActivity {
         });
 
         inicializarComponentes();
-        cntrTareas comrpobarLista = new cntrTareas();
+        cntrTareas comrpobarLista = new cntrTareas(this);
 
 
-        boolean vacia = comrpobarLista.comprobarListaVacia();
+
+
         mostrarRecyclerView();
 
 
@@ -69,7 +72,7 @@ public class vistaPrincipal extends AppCompatActivity {
     public void inicializarComponentes() {
         btnAniadir=findViewById(R.id.btnAniadir);
         rvTareas=findViewById(R.id.rvTarea);
-        cntrTareas tar = new cntrTareas();
+        cntrTareas tar = new cntrTareas(this);
         tar.retornarListaTareas(new TareasCallBack() {
             @Override
             public void onTareasLoaded(ArrayList<Tarea> tareas) {
@@ -83,7 +86,6 @@ public class vistaPrincipal extends AppCompatActivity {
     public void mostrarRecyclerView() {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-
         rvTareas.setLayoutManager(layoutManager);
         rvTareas.setAdapter(Adaptador);
 
