@@ -71,7 +71,5 @@ public class registrarCuenta extends AppCompatActivity {
         correoNuevo = findViewById(R.id.edtCorreo);
     }
 
-    public void RegresarMainActivity() {
-       finish();
-    }
+
 }

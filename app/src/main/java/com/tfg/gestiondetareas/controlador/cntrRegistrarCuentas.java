@@ -13,6 +13,7 @@ import com.google.firebase.Firebase;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -52,21 +53,35 @@ public class cntrRegistrarCuentas {
                         // Registro exitoso
                         FirebaseUser user = auth.getCurrentUser();
 
+
+
                         //Si el usuario es distinto de nulo, entonces se guardarán los datos registrados en la base de datos (salvo la contraseña)
                         if (user != null) {
                             // Guardar la dirección de correo electrónico del usuario en la base de datos
                             FirebaseDatabase database = FirebaseDatabase.getInstance(urldb);
-                            String userId = user.getUid();
-                            DatabaseReference userRef = database.getReference(ruta_usuarios).child(userId);
-                            userRef.child("Correo").setValue(email);
-                            userRef.child("nombre_usuario").setValue(nombreusuario);
+                            DatabaseReference userRef = database.getReference().child(ruta_usuarios);
+                            String clave= userRef.push().getKey();
+                            Map<String, Object> nuevoUsuario = new HashMap<>();
+                            nuevoUsuario.put("Correo", email);
+                            nuevoUsuario.put("nombre_usuario", nombreusuario);
+                            userRef.child(clave).setValue(nuevoUsuario);
                        }
 
                         Log.i("registroCorrecto", "Se ha registrado el usuario:" + nombreusuario);
+
                         Intent intent=new Intent().setClass(contexto, MainActivity.class);
                         contexto.startActivity(intent);
 
                     } else {
+
+                        //Si se cumple esta condición significa que ya hay un correo electrónico usando la cuenta
+
+                        if (task.getException() instanceof FirebaseAuthUserCollisionException) {
+                            // El correo electrónico ya está en uso por otra cuenta
+                            Toast.makeText(contexto, R.string.toastCorreoEnUso, Toast.LENGTH_SHORT).show();
+
+                        }
+
                         // Registro fallido
                         Log.i("falloRegistro", "Ha fallado al registrarse un usuario");
                     }
@@ -84,9 +99,11 @@ public class cntrRegistrarCuentas {
                             Toast.makeText(contexto, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show();
                             Intent vistaIntent= new Intent().setClass(contexto, vistaPrincipal.class);
                             contexto.startActivity(vistaIntent);
-                        } else {
+                        }
+
+                        else {
                             // Inicio de sesión fallido
-                            Toast.makeText(contexto, "Error al iniciar sesión: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(contexto, R.string.toastErrorInicioSesion, Toast.LENGTH_SHORT).show();
                         }
                     });
         }

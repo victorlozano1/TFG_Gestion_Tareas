@@ -15,6 +15,9 @@
         android:theme="@style/Theme.GestionDeTareas"
         tools:targetApi="31">
         <activity
+            android:name=".Vista.crearTareaActivity"
+            android:exported="false" />
+        <activity
             android:name=".vistaPrincipal"
             android:exported="false" />
         <activity
