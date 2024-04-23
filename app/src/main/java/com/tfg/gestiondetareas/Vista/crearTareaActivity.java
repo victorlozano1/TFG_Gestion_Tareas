@@ -12,9 +12,14 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.tfg.gestiondetareas.Modelo.Tarea;
 import com.tfg.gestiondetareas.R;
+import com.tfg.gestiondetareas.controlador.NombreTarInt;
+import com.tfg.gestiondetareas.controlador.TareasCallBack;
 import com.tfg.gestiondetareas.controlador.cntrRegistrarCuentas;
 import com.tfg.gestiondetareas.controlador.cntrTareas;
+
+import java.util.ArrayList;
 
 public class crearTareaActivity extends AppCompatActivity {
 
@@ -50,30 +55,28 @@ public class crearTareaActivity extends AppCompatActivity {
         nombreTarea = findViewById(R.id.edtNombreNuevaTarea);
         descripcionTarea = findViewById(R.id.edtDescripcionTarea);
         crear = findViewById(R.id.btnConfTarea);
-        cntrRegistrarCuentas usuario = new cntrRegistrarCuentas();
-
-
-
-
 
     }
 
 
     //Metodo que se encargara de comprobar si hay algún valor nulo y lo enviará al controlador
-    public void RecogerTarea()  {
-
+    public void RecogerTarea() {
         if(nombreTarea.getText().toString().isEmpty() || descripcionTarea.getText().toString().isEmpty()) {
-
             Toast.makeText(this, "Por favor, rellene todos los campos para enviar la tarea", Toast.LENGTH_LONG).show();
+        } else {
+            String nombreTar = nombreTarea.getText().toString();
+            String descripcionTar = descripcionTarea.getText().toString();
+            cntrTareas registrarTarea = new cntrTareas(this);
+            registrarTarea.comprobarNombreTarea(nombreTar, new NombreTarInt() {
+                @Override
+                public void onResult(boolean existeTarea) {
+                    if(existeTarea) {
+                        Toast.makeText(crearTareaActivity.this, R.string.toastNombreTarUnico, Toast.LENGTH_SHORT).show();
+                    } else {
+                        registrarTarea.AñadirTarea(nombreTar, descripcionTar);
+                    }
+                }
+            });
         }
-
-        else {
-
-            String nombreTar=nombreTarea.getText().toString();
-            String descripcionTar=descripcionTarea.getText().toString();
-            cntrTareas registrarTarea=new cntrTareas(this);
-            registrarTarea.AñadirTarea(nombreTar, descripcionTar);
-        }
-
     }
 }

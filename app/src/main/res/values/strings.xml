@@ -20,4 +20,5 @@
     <string name="chCompleto">Marcar como completada</string>
     <string name="mensajeBienvenida">Bienvenido a tu gestor de tareas</string>
     <string name="ChiquiIbai">Lista de Tareas</string>
+    <string name="toastNombreTarUnico">El nombre de la tarea debe ser único</string>
 </resources>

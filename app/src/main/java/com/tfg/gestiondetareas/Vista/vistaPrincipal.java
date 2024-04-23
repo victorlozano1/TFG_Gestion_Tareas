@@ -1,32 +1,26 @@
-package com.tfg.gestiondetareas;
+package com.tfg.gestiondetareas.Vista;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.tfg.gestiondetareas.Modelo.Tarea;
-import com.tfg.gestiondetareas.Vista.TareaAdapter;
-import com.tfg.gestiondetareas.Vista.crearTareaActivity;
+import com.tfg.gestiondetareas.R;
 import com.tfg.gestiondetareas.controlador.TareasCallBack;
 import com.tfg.gestiondetareas.controlador.cntrTareas;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class vistaPrincipal extends AppCompatActivity {
 
@@ -80,14 +74,51 @@ public class vistaPrincipal extends AppCompatActivity {
                 Adaptador = new TareaAdapter(listaTareas, vistaPrincipal.this);
                 mostrarRecyclerView();
             }
+
+
+
+
         });
     }
 
     public void mostrarRecyclerView() {
 
+        //Crea un layoutmanager para el reyclcerView
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+
+        //Inserta el adaptador y el layoutmanager al recyclerView
         rvTareas.setLayoutManager(layoutManager);
         rvTareas.setAdapter(Adaptador);
+
+        //Añade el evento de deslizar para borrar
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0,  ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                // Obtiene la posición del elemento deslizado
+                int position = viewHolder.getAdapterPosition();
+                cntrTareas tar = new cntrTareas(vistaPrincipal.this);
+                Tarea tarDeslizada = listaTareas.get(position);
+                String IdTarea = tarDeslizada.getNombre();
+                tar.BorrarTarea(IdTarea);
+
+
+            }
+
+
+        };
+
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(rvTareas);
+
+
+
+
+
+
 
     }
 

@@ -8,7 +8,7 @@ public class Usuario {
 
     public String contrasenia;
 
-    public Usuario(String nombre, String correo_electronico, String contrasenia) {
+    public Usuario(String nombre, String correo_electronico) {
         Nombre = nombre;
         this.correo_electronico = correo_electronico;
         this.contrasenia = contrasenia;

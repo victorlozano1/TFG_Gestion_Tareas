@@ -7,6 +7,7 @@ import java.util.Date;
 
 public class Tarea {
 
+    private String IdTarea;
     private String nombre;
     private String descripcion;
     private String Fecha_publicacion;
@@ -23,6 +24,14 @@ public class Tarea {
         this.Fecha_publicacion = fecha_publicacion;
         this.nombre_publicador = nombre_publicador;
         this.Completada = completo;
+    }
+
+    public String getIdTarea() {
+        return IdTarea;
+    }
+
+    public void setIdTarea(String idTarea) {
+        IdTarea = idTarea;
     }
 
     public String getNombre() {
@@ -42,7 +51,6 @@ public class Tarea {
     }
 
     public String getFecha_publicacion() {
-
 
         return Fecha_publicacion;
     }

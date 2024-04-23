@@ -1,4 +1,4 @@
-package com.tfg.gestiondetareas;
+package com.tfg.gestiondetareas.Vista;
 
 import android.os.Bundle;
 
@@ -11,6 +11,8 @@ import androidx.core.view.WindowInsetsCompat;
 import java.util.TimerTask;
 import java.util.Timer;
 import android.content.Intent;
+
+import com.tfg.gestiondetareas.R;
 
 public class splashscreenactivity extends AppCompatActivity {
 
