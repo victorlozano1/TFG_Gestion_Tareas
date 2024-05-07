@@ -21,4 +21,11 @@
     <string name="mensajeBienvenida">Bienvenido a tu gestor de tareas</string>
     <string name="ChiquiIbai">Lista de Tareas</string>
     <string name="toastNombreTarUnico">El nombre de la tarea debe ser único</string>
+    <string name="tvFechaPubDetalle">Fecha de publicación:</string>
+    <string name="tvPublicadorDetalle">Publicador por:</string>
+    <string name="opcFragmentTarea">Tareas</string>
+    <string name="opcFragmentCuenta">Cuenta</string>
+    <string name="opcFragmentAjustes">Ajustes</string>
+    <string name="ModoOscuroPreference">Habilitar modo oscuro</string>
+    <string name="ReiniciarApp">Debe reiniciar la aplicación para aplicar el tema</string>
 </resources>

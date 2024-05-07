@@ -1,7 +1,6 @@
 package com.tfg.gestiondetareas.Vista;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -12,14 +11,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.tfg.gestiondetareas.Modelo.Tarea;
 import com.tfg.gestiondetareas.R;
 import com.tfg.gestiondetareas.controlador.NombreTarInt;
-import com.tfg.gestiondetareas.controlador.TareasCallBack;
-import com.tfg.gestiondetareas.controlador.cntrRegistrarCuentas;
 import com.tfg.gestiondetareas.controlador.cntrTareas;
-
-import java.util.ArrayList;
 
 public class crearTareaActivity extends AppCompatActivity {
 
@@ -36,7 +30,7 @@ public class crearTareaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_crear_tarea);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.clayVistaPrincipal), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;

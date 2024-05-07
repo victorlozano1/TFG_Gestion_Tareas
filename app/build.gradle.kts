@@ -43,6 +43,7 @@ dependencies {
     //Para la base de dato
     implementation("com.google.firebase:firebase-database")
     implementation ("com.google.android.material:material:1.5.0")
+    implementation(libs.preference)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

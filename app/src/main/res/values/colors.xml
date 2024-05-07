@@ -3,5 +3,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="colorCardView">#ECDA40</color>
-    <color name="colorBotones">#25BBFF</color>
+    <color name="colorBotones">#15B6FF</color>
+    <color name ="colorNavigationView">#20E609</color>
+    <color name="colorPrimaryDark">@color/black</color>
+    <color name="colorBottomNavigationView">#098BC6</color>
+
 </resources>

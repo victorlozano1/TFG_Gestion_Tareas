@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/clayVistaPrincipal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Vista.DetalleTareaActivity">
@@ -20,10 +20,49 @@
     <TextView
         android:id="@+id/tvDescripcionTareaDetalle"
         android:layout_width="wrap_content"
-        android:layout_height="19dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="56dp"
         android:text="tvDescripcion"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvNombreTarea" />
+
+    <TextView
+        android:id="@+id/tvTextoFecha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="456dp"
+        android:text="@string/tvFechaPubDetalle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tvFechaPub"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="-85dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="@+id/tvTextoFecha"
+        app:layout_constraintTop_toTopOf="@+id/tvTextoFecha" />
+
+    <TextView
+        android:id="@+id/tvPublicadorDetalle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Publicado por:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTextoFecha" />
+
+    <TextView
+        android:id="@+id/tvPublicadorDato"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        app:layout_constraintStart_toEndOf="@+id/tvPublicadorDetalle"
+        app:layout_constraintTop_toBottomOf="@+id/tvFechaPub" />
 </androidx.constraintlayout.widget.ConstraintLayout>

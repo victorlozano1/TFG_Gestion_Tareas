@@ -41,12 +41,22 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.ViewHolder> 
         holder.Tarea.setText(listaTareas.get(position).getNombre());
         holder.Fecha.setText(listaTareas.get(position).getFecha_publicacion());
         holder.publicador.setText(listaTareas.get(position).getNombre_publicador());
+
+        //Cuando pulsa click sobre un cardview, se dirige a una activity donde muestra en detalle la tarea
+
+
+
         holder.cv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //Crea un nuevo intent para ir a la activity
                 Intent intent = new Intent(contexto, DetalleTareaActivity.class);
+                //Almacena los datos de la tarea
                 intent.putExtra("NombreTareaDetalle", listaTareas.get(position).getNombre());
                 intent.putExtra("DescripcionTareaDetalle", listaTareas.get(position).getDescripcion());
+                intent.putExtra("FechaPublicacionDetalle", listaTareas.get(position).getFecha_publicacion());
+                intent.putExtra("NombrePublicadorDetalle",listaTareas.get(position).getNombre_publicador());
                 contexto.startActivity(intent);
 
             }
@@ -67,9 +77,8 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.ViewHolder> 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             Tarea=itemView.findViewById(R.id.tvNomTarea);
-            Fecha=itemView.findViewById(R.id.tvDesc);
+            Fecha=itemView.findViewById(R.id.tvFecha);
             publicador=itemView.findViewById(R.id.tvPublicador);
-            completado=itemView.findViewById(R.id.chCompleto);
             cv=itemView.findViewById(R.id.clayCardView);
 
         }

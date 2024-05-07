@@ -1,127 +1,87 @@
 package com.tfg.gestiondetareas.Vista;
 
-import android.content.Intent;
+import static android.app.UiModeManager.MODE_NIGHT_YES;
+
+import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
+import android.os.Handler;
+import android.view.MenuItem;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.preference.PreferenceManager;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.tfg.gestiondetareas.Modelo.Tarea;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.tfg.gestiondetareas.R;
-import com.tfg.gestiondetareas.controlador.TareasCallBack;
-import com.tfg.gestiondetareas.controlador.cntrTareas;
-
-import java.util.ArrayList;
+import com.tfg.gestiondetareas.controlador.cntrAjustes;
 
 public class vistaPrincipal extends AppCompatActivity {
 
 
-    FloatingActionButton btnAniadir;
-    RecyclerView rvTareas;
+    private cntrAjustes ajustesFragment;
 
-    ArrayList<Tarea> listaTareas;
-    TareaAdapter Adaptador;
-
-
-
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+
+
         setContentView(R.layout.activity_vista_principal);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.clayVistaPrincipal), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        inicializarComponentes();
-        cntrTareas comrpobarLista = new cntrTareas(this);
 
 
+        //BottomNavigationView para la vista principal
+
+        BottomNavigationView bottom_navigation = findViewById(R.id.NavegadorVistaPrincipal);
 
 
-        mostrarRecyclerView();
-
-
-        //Evento para añadir una nueva tarea a la lista compartida
-        btnAniadir.setOnClickListener(new View.OnClickListener() {
+        //Evento que servirá para navegar entre fragments
+        bottom_navigation.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent().setClass(vistaPrincipal.this, crearTareaActivity.class);
-                startActivity(intent);
+            public boolean onNavigationItemSelected(@NonNull MenuItem Item) {
+                if (Item.getItemId() == R.id.opcTareas)
+                    CargarFragment(new vistaFragmentTareas());
+                if (Item.getItemId() == R.id.opcCuenta)
+                    CargarFragment(new vistaFragmentCuenta());
+                if (Item.getItemId() == R.id.opcAjustes) {
+                    // Mostrar el fragmento de ajustes existente si está disponible
+                    if (ajustesFragment == null) {
+                        ajustesFragment = new cntrAjustes();
+                    }
+                    CargarFragment(ajustesFragment);
+                }
+                return true;
             }
         });
-    }
-
-    public void inicializarComponentes() {
-        btnAniadir=findViewById(R.id.btnAniadir);
-        rvTareas=findViewById(R.id.rvTarea);
-        cntrTareas tar = new cntrTareas(this);
-        tar.retornarListaTareas(new TareasCallBack() {
-            @Override
-            public void onTareasLoaded(ArrayList<Tarea> tareas) {
-                listaTareas = tareas;
-                Adaptador = new TareaAdapter(listaTareas, vistaPrincipal.this);
-                mostrarRecyclerView();
-            }
-
-
-
-
-        });
-    }
-
-    public void mostrarRecyclerView() {
-
-        //Crea un layoutmanager para el reyclcerView
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-
-        //Inserta el adaptador y el layoutmanager al recyclerView
-        rvTareas.setLayoutManager(layoutManager);
-        rvTareas.setAdapter(Adaptador);
-
-        //Añade el evento de deslizar para borrar
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0,  ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                // Obtiene la posición del elemento deslizado
-                int position = viewHolder.getAdapterPosition();
-                cntrTareas tar = new cntrTareas(vistaPrincipal.this);
-                Tarea tarDeslizada = listaTareas.get(position);
-                String IdTarea = tarDeslizada.getNombre();
-                tar.BorrarTarea(IdTarea);
-
-
-            }
-
-
-        };
-
-        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(rvTareas);
-
-
-
-
-
+        CargarFragment(new vistaFragmentTareas());
 
 
     }
 
+    //Método que se encarga de cambiar de fragment
+    private void CargarFragment(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_container, fragment);
+        transaction.commit();
+    }
 
 
 }
+
+
+
