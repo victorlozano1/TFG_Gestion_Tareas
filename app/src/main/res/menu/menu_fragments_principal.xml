@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/opcTareas"
+        android:icon="@drawable/icono_tarea"
+        android:title="@string/opcFragmentTarea" />
+    <item
+        android:id="@+id/opcCuenta"
+        android:icon="@drawable/icono_cuenta"
+        android:title="@string/opcFragmentCuenta" />
+    <item
+        android:id="@+id/opcAjustes"
+        android:icon="@drawable/baseline_display_settings_24"
+        android:title="@string/opcFragmentAjustes" />
+</menu>
