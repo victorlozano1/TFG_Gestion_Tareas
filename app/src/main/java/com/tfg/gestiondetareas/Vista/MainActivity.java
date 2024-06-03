@@ -1,7 +1,6 @@
 package com.tfg.gestiondetareas.Vista;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -9,14 +8,12 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.preference.PreferenceManager;
 
 import com.tfg.gestiondetareas.R;
-import com.tfg.gestiondetareas.controlador.cntrRegistrarCuentas;
+import com.tfg.gestiondetareas.controlador.cntrCuentas;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -72,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void iniciarSesion() {
-        cntrRegistrarCuentas sesion= new cntrRegistrarCuentas(this);
+        cntrCuentas sesion= new cntrCuentas(this);
         if(correo.getText().toString().isEmpty() || contrasenia.getText().toString().isEmpty()) {
 
             Toast.makeText(this, R.string.toastRegIncorrecto, Toast.LENGTH_LONG);

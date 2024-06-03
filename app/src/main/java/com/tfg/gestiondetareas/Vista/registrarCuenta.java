@@ -13,7 +13,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.tfg.gestiondetareas.R;
-import com.tfg.gestiondetareas.controlador.cntrRegistrarCuentas;
+import com.tfg.gestiondetareas.controlador.cntrCuentas;
 
 public class registrarCuenta extends AppCompatActivity {
 
@@ -50,7 +50,7 @@ public class registrarCuenta extends AppCompatActivity {
                     String contraseniausu = contraseniaNueva.getText().toString();
                     String correousu=correoNuevo.getText().toString();
 
-                    cntrRegistrarCuentas registrar= new cntrRegistrarCuentas(registrarCuenta.this);
+                    cntrCuentas registrar= new cntrCuentas(registrarCuenta.this);
 
                     //Metodo que se encargará de crear la nueva cuenta
                     registrar.registrarnuevoUsuario(correousu, contraseniausu, nombreusu);

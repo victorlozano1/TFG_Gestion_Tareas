@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class cntrRegistrarCuentas {
+public class cntrCuentas {
 
 
     //Ruta donde se encuentra la base de datos
@@ -43,10 +43,10 @@ public class cntrRegistrarCuentas {
     Context contexto;
     private FirebaseAuth auth;
 
-    public cntrRegistrarCuentas() {
+    public cntrCuentas() {
     }
 
-    public cntrRegistrarCuentas(Context contexto) {
+    public cntrCuentas(Context contexto) {
 
         this.contexto = contexto;
 
@@ -111,7 +111,7 @@ public class cntrRegistrarCuentas {
                     //Si se cumple la condición, se inicia la sesión
                     if (task.isSuccessful()) {
                         // Inicio de sesión exitoso
-                        Toast.makeText(contexto, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(contexto, R.string.toastInicioSesionExitoso, Toast.LENGTH_SHORT).show();
                         Intent vistaIntent = new Intent().setClass(contexto, vistaPrincipal.class);
                         //Se pone un putextra con el nombre del usuario que se ha logado (se utilizará para algunas gestiones)
                         contexto.startActivity(vistaIntent);

@@ -28,7 +28,7 @@ public class cntrTareas {
 public Context contexto;
 
 
-    private cntrRegistrarCuentas controladorCuentas;
+    private cntrCuentas controladorCuentas;
 public cntrTareas(Context contexto) {
     this.contexto = contexto;
 }
@@ -44,7 +44,7 @@ public cntrTareas(Context contexto) {
    //Este método añadira la tarea a la base de datos
    public void AñadirTarea(String nombreTarea, String descripcion) {
 
-       controladorCuentas = new cntrRegistrarCuentas(contexto);
+       controladorCuentas = new cntrCuentas(contexto);
        DatabaseReference tareasRef = FirebaseDatabase.getInstance(urldb).getReference().child(ruta_tarea);
        Date fecha = new Date();
        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -58,8 +58,7 @@ public cntrTareas(Context contexto) {
                String nombrePublicador = usuario.getNombre(); // Obtiene el nombre del usuario
                //DatabaseReference nodoId = tareasRef.push();
                //String idTarea = nodoId.getKey();
-
-                              // Crea un mapa con los datos de la nueva tarea
+               // Crea un mapa con los datos de la nueva tarea
                Map<String, Object> nuevaTarea = new HashMap<>();
               // nuevaTarea.put("IdTarea", idTarea);
                nuevaTarea.put("nombre", nombreTarea);
@@ -79,32 +78,6 @@ public cntrTareas(Context contexto) {
            }
        });
    }
-//Método que comprueba si la lista se encuentra vacia
-public boolean comprobarListaVacia() {
-
-
-    final boolean[] listaVacia = {true}; // Usamos un array para poder modificar el valor dentro del ValueEventListener
-    DatabaseReference tareasRef = FirebaseDatabase.getInstance(urldb).getReference().child(ruta_tarea);
-
-    // Realizamos la consulta a la base de datos
-    tareasRef.addListenerForSingleValueEvent(new ValueEventListener() {
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
-            // Actualizamos el valor de listaVacia de acuerdo a los datos obtenidos de la base de datos
-            listaVacia[0] = !dataSnapshot.exists() || !dataSnapshot.hasChildren();
-        }
-
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-            // Manejar errores de lectura de la base de datos
-            System.out.println("Error al leer datos: " + databaseError.getMessage());
-        }
-    });
-
-    // Devolvemos el valor actual de listaVacia
-    return listaVacia[0];
-
- }
 
 
  //Metodo que recogerá todas las tareas almacenadas en la base de datos y lo retornará como lista
