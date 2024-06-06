@@ -3,16 +3,21 @@ package com.tfg.gestiondetareas.Vista;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.tfg.gestiondetareas.Modelo.Tarea;
 import com.tfg.gestiondetareas.R;
@@ -28,6 +33,7 @@ public class vistaFragmentTareas extends Fragment {
 
     ArrayList<Tarea> listaTareas;
     TareaAdapter Adaptador;
+    private MaterialToolbar ToolbarMenu;
 
     @Nullable
     @Override
@@ -52,8 +58,14 @@ public class vistaFragmentTareas extends Fragment {
 
 
     public void inicializarComponentes() {
-        btnAniadir=view.findViewById(R.id.btnAniadir);
-        rvTareas=view.findViewById(R.id.rvTarea);
+        btnAniadir = view.findViewById(R.id.btnAniadir);
+        rvTareas = view.findViewById(R.id.rvTarea);
+        ToolbarMenu = view.findViewById(R.id.toolBarMenu);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(ToolbarMenu);
+
+        setHasOptionsMenu(true); // Indicar que el fragmento tiene un menú propio
+
+
         cntrTareas tar = new cntrTareas(view.getContext());
         tar.retornarListaTareas(new TareasCallBack() {
             @Override
@@ -107,6 +119,70 @@ public class vistaFragmentTareas extends Fragment {
 
 
 
+
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_vista_tareas, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId()==R.id.opcMenuTrabajo){
+            cntrTareas consulta = new cntrTareas();
+            String TipoTarea =  item.getTitle().toString();
+            consulta.FiltrarPorTipoTarea(TipoTarea, new TareasCallBack() {
+                @Override
+                public void onTareasLoaded(ArrayList<Tarea> tareas) {
+                    listaTareas = tareas;
+                    Adaptador = new TareaAdapter(listaTareas, view.getContext());
+                    mostrarRecyclerView();
+                }
+            });
+        }
+        if(item.getItemId()==R.id.opcMenuDomestico){
+            cntrTareas consulta = new cntrTareas();
+            String TipoTarea =  item.getTitle().toString();
+            consulta.FiltrarPorTipoTarea(TipoTarea, new TareasCallBack() {
+                @Override
+                public void onTareasLoaded(ArrayList<Tarea> tareas) {
+                    listaTareas = tareas;
+                    Adaptador = new TareaAdapter(listaTareas, view.getContext());
+                    mostrarRecyclerView();
+                }
+            });
+        }
+        if(item.getItemId()==R.id.opcMenuOcio){
+            cntrTareas consulta = new cntrTareas();
+            String TipoTarea =  item.getTitle().toString();
+            consulta.FiltrarPorTipoTarea(TipoTarea, new TareasCallBack() {
+                @Override
+                public void onTareasLoaded(ArrayList<Tarea> tareas) {
+                    listaTareas = tareas;
+                    Adaptador = new TareaAdapter(listaTareas, view.getContext());
+                    mostrarRecyclerView();
+                }
+            });
+        }
+
+        if(item.getItemId()==R.id.opcNoFiltrar) {
+            cntrTareas consulta = new cntrTareas();
+            String TipoTarea =  item.getTitle().toString();
+            consulta.retornarListaTareas(new TareasCallBack() {
+                @Override
+                public void onTareasLoaded(ArrayList<Tarea> tareas) {
+                    listaTareas = tareas;
+                    Adaptador = new TareaAdapter(listaTareas, view.getContext());
+                    mostrarRecyclerView();
+                }
+            });
+        }
+
+
+
+        return super.onOptionsItemSelected(item);
 
     }
 }

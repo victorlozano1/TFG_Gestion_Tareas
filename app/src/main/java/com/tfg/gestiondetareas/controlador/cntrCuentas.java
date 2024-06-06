@@ -7,6 +7,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,7 +23,10 @@ import com.tfg.gestiondetareas.Modelo.Usuario;
 import com.tfg.gestiondetareas.R;
 import com.tfg.gestiondetareas.Vista.vistaPrincipal;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,12 +39,6 @@ public class cntrCuentas {
 
     //Ruta donde se encuentra los usuarios
     public final String ruta_usuarios = "Usuarios";
-
-    ArrayList<String> nombreusuarioLogado = new ArrayList<>();
-
-    public Usuario usuarioLogado;
-
-    String nombreUsu = null;
     Context contexto;
     private FirebaseAuth auth;
 
@@ -113,11 +112,11 @@ public class cntrCuentas {
                         // Inicio de sesión exitoso
                         Toast.makeText(contexto, R.string.toastInicioSesionExitoso, Toast.LENGTH_SHORT).show();
                         Intent vistaIntent = new Intent().setClass(contexto, vistaPrincipal.class);
-                        //Se pone un putextra con el nombre del usuario que se ha logado (se utilizará para algunas gestiones)
                         contexto.startActivity(vistaIntent);
                     } else {
                         // Inicio de sesión fallido
                         Toast.makeText(contexto, R.string.toastErrorInicioSesion, Toast.LENGTH_SHORT).show();
+
                     }
                 });
     }
@@ -142,6 +141,7 @@ public class cntrCuentas {
                         callback.onUsuarioRecogido(usuarioLogado);
                         return;
                     }
+                    consulta.removeEventListener(this);
                 }
 
                 @Override
@@ -154,8 +154,100 @@ public class cntrCuentas {
         }
     }
 
+    public void editarNombre(String correo, String nombreNuevo) {
+        DatabaseReference db = FirebaseDatabase.getInstance(urldb).getReference().child(ruta_usuarios);
+        Query consulta = db.orderByChild("Correo").equalTo(correo);
+        cntrTareas actualizarnombre = new cntrTareas();
 
-}
+        consulta.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        // Obtener la fecha actual
+                        Date fechaActual = new Date();
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                        String fechaCambio = sdf.format(fechaActual);
+
+                        // Crear un mapa con las actualizaciones
+                        Map<String, Object> updates = new HashMap<>();
+                        updates.put("nombre_usuario", nombreNuevo);
+                        updates.put("fecha_ultimo_cambio", fechaCambio);
+
+                        // Realizar la actualización en Firebase Database
+                        dataSnapshot.getRef().updateChildren(updates).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Log.d("EditarNombre", "Usuario actualizado exitosamente: " + correo);
+                                    actualizarnombre.actualizarTareasNombreNuevo(nombreNuevo, dataSnapshot.child("nombre_usuario").getValue(String.class));
+                                } else {
+                                    Log.e("EditarNombre", "Error actualizando el usuario", task.getException());
+                                }
+                            }
+                        });
+                    }
+                } else {
+                    Log.i("EditarNombre", "No se encontró el usuario con el correo: " + correo);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.i("ErrorLecturaBD", "Error al leer datos: " + error.getMessage());
+            }
+        });
+    }
+
+    public void obtenerFechaUltimoCambio(String correo, FechaCambioCallback callback) {
+        DatabaseReference db = FirebaseDatabase.getInstance(urldb).getReference().child(ruta_usuarios);
+        Query consulta = db.orderByChild("Correo").equalTo(correo);
+        consulta.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()) {
+                    String fechaUltimoCambio = dataSnapshot.child("fecha_ultimo_cambio").getValue(String.class);
+                    callback.onFechaObtenida(fechaUltimoCambio);
+                }
+                consulta.removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                callback.onError(databaseError);
+            }
+        });
+    }
+    public boolean esCambioPermitido(String fechaUltimoCambio) {
+        if (fechaUltimoCambio == null || fechaUltimoCambio.isEmpty()) {
+            return true; // Permitir el cambio si no hay registro de un cambio anterior
+        }
+
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            Date fechaActual = new Date();
+            Date fechaUltima = sdf.parse(fechaUltimoCambio);
+
+            long diferenciaMilisegundos = fechaActual.getTime() - fechaUltima.getTime();
+            long diferenciaDias = diferenciaMilisegundos / (1000 * 60 * 60 * 24);
+
+            return diferenciaDias >= 1; // Permitir el cambio si ha pasado al menos un día
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return false; // En caso de error, no permitir el cambio
+        }
+    }
+    public interface FechaCambioCallback {
+        void onFechaObtenida(String fechaUltimoCambio);
+        void onError(DatabaseError error);
+    }
+
+    }
+
+
+
+
+
 
 
 

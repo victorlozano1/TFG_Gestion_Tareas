@@ -1,6 +1,7 @@
 package com.tfg.gestiondetareas.Vista;
 
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -9,8 +10,10 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.preference.ListPreference;
 import androidx.preference.PreferenceManager;
 
+import java.util.Locale;
 import java.util.TimerTask;
 import java.util.Timer;
 import android.content.Intent;
@@ -25,6 +28,8 @@ public class splashscreenactivity extends AppCompatActivity {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         boolean modoOscuroActivado = preferences.getBoolean("modo_oscuro", false);
         aplicarModoOscuro(modoOscuroActivado);
+
+
 
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
@@ -64,5 +69,7 @@ public class splashscreenactivity extends AppCompatActivity {
             getDelegate().applyDayNight();
         }
     }
+
+
 
 }

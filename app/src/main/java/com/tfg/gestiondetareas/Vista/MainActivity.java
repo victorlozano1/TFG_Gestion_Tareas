@@ -1,6 +1,7 @@
 package com.tfg.gestiondetareas.Vista;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,9 +12,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.preference.PreferenceManager;
 
 import com.tfg.gestiondetareas.R;
 import com.tfg.gestiondetareas.controlador.cntrCuentas;
+
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         inicializarcomponentes();
+
+
         //Si pulsa el boton cierra la aplicación
         btncerrarApp.setOnClickListener(v->finishAffinity());
 
@@ -45,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
 
 
 

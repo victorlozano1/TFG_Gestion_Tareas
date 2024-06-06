@@ -1,5 +1,6 @@
 package com.tfg.gestiondetareas.controlador;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -7,6 +8,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -15,6 +18,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.tfg.gestiondetareas.Modelo.Tarea;
 import com.tfg.gestiondetareas.Modelo.Usuario;
+import com.tfg.gestiondetareas.R;
+import com.tfg.gestiondetareas.Vista.TareaAdapter;
 import com.tfg.gestiondetareas.Vista.vistaPrincipal;
 
 import java.text.SimpleDateFormat;
@@ -29,7 +34,11 @@ public Context contexto;
 
 
     private cntrCuentas controladorCuentas;
-public cntrTareas(Context contexto) {
+
+    public cntrTareas() {
+    }
+
+    public cntrTareas(Context contexto) {
     this.contexto = contexto;
 }
 
@@ -38,14 +47,13 @@ public cntrTareas(Context contexto) {
    private final String urldb="https://tfggestiondetareas-default-rtdb.europe-west1.firebasedatabase.app/";
    private final String ruta_tarea="Tareas";
 
-   private Usuario nombreUsu;
-   private boolean Repite = false;
+
 
    //Este método añadira la tarea a la base de datos
-   public void AñadirTarea(String nombreTarea, String descripcion) {
-
+   public void AñadirTarea(String nombreTarea, String descripcion, String tipoTarea) {
        controladorCuentas = new cntrCuentas(contexto);
-       DatabaseReference tareasRef = FirebaseDatabase.getInstance(urldb).getReference().child(ruta_tarea);
+       FirebaseDatabase database = FirebaseDatabase.getInstance(urldb);
+       DatabaseReference tareasRef = database.getReference().child(ruta_tarea);
        Date fecha = new Date();
        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
        String fechaFormateada = sdf.format(fecha);
@@ -56,30 +64,23 @@ public cntrTareas(Context contexto) {
            public void onUsuarioRecogido(Usuario usuario) {
                // Se ejecuta cuando se recoge el usuario correctamente
                String nombrePublicador = usuario.getNombre(); // Obtiene el nombre del usuario
-               //DatabaseReference nodoId = tareasRef.push();
-               //String idTarea = nodoId.getKey();
                // Crea un mapa con los datos de la nueva tarea
                Map<String, Object> nuevaTarea = new HashMap<>();
-              // nuevaTarea.put("IdTarea", idTarea);
                nuevaTarea.put("nombre", nombreTarea);
+               String clave = tareasRef.push().getKey();
                nuevaTarea.put("descripcion", descripcion);
                nuevaTarea.put("fecha", fechaFormateada);
+               nuevaTarea.put("Tipo_Tarea", tipoTarea);
                nuevaTarea.put("completada", false);
                nuevaTarea.put("nombre_publicador", nombrePublicador); // Usa el nombre del usuario obtenido
 
-
                // Guarda la nueva tarea en la base de datos
-               tareasRef.push().setValue(nuevaTarea);
-
-                //Lo redirige a la vista principal nuevamente
-               Intent intent = new Intent().setClass(contexto.getApplicationContext(), vistaPrincipal.class);
-               Toast.makeText(contexto.getApplicationContext(), "Se ha añadido la tarea correctamente", Toast.LENGTH_SHORT).show();
-               contexto.startActivity(intent);
+               tareasRef.child(clave).setValue(nuevaTarea);
+               // Tarea añadida correctamente
+               Toast.makeText(contexto.getApplicationContext(), R.string.ToastTareaNueva, Toast.LENGTH_SHORT).show();
            }
        });
    }
-
-
  //Metodo que recogerá todas las tareas almacenadas en la base de datos y lo retornará como lista
     public void retornarListaTareas(TareasCallBack callback) {
         DatabaseReference tareasRef = FirebaseDatabase.getInstance(urldb).getReference().child(ruta_tarea);
@@ -89,7 +90,7 @@ public cntrTareas(Context contexto) {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ArrayList<Tarea> listaTareas = new ArrayList<>();
                 for (DataSnapshot tareaSnapshot : dataSnapshot.getChildren()) {
-                    //String IdTarea = tareaSnapshot.child("IdTarea").getValue(String.class);
+
                     String nombre = tareaSnapshot.child("nombre").getValue(String.class);
                     String descripcion = tareaSnapshot.child("descripcion").getValue(String.class);
                     String fecha= tareaSnapshot.child("fecha").getValue(String.class);
@@ -100,6 +101,9 @@ public cntrTareas(Context contexto) {
                     listaTareas.add(new Tarea(nombre, descripcion,  fecha, publicador, completado));
                 }
                 callback.onTareasLoaded(listaTareas);
+
+
+
             }
 
             @Override
@@ -124,7 +128,10 @@ public cntrTareas(Context contexto) {
                         tarSnapshot.getRef().removeValue();
 
 
+
+
                     }
+                    consulta.removeEventListener(this);
                 }
             }
 
@@ -146,17 +153,167 @@ public cntrTareas(Context contexto) {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 boolean existeTarea = snapshot.exists();
                 tarea.onResult(existeTarea);
+                consulta.removeEventListener(this);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Manejar errores de base de datos si es necesario
+
             }
         });
 
 
+
+
+    }
+
+    public void actualizarTareasNombreNuevo(String nombreNuevo, String nombreAntiguo) {
+        Log.d("ActualizarTareas", "Iniciando actualización de tareas para: " + nombreAntiguo);
+        DatabaseReference tareasRef = FirebaseDatabase.getInstance(urldb).getReference().child(ruta_tarea);
+        Query query = tareasRef.orderByChild("nombre_publicador").equalTo(nombreAntiguo);
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Map<String, Object> updates = new HashMap<>();
+                    for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                        // Crear la ruta completa para el campo específico que queremos actualizar
+                        String key = childSnapshot.getKey();
+                        String rutaCompleta = ruta_tarea + "/" + key + "/nombre_publicador";
+                        updates.put(rutaCompleta, nombreNuevo);
+                    }
+
+                    // Realizar la actualización en Firebase Database
+                    FirebaseDatabase.getInstance(urldb).getReference().updateChildren(updates)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Log.d("ActualizarTareas", "Tareas actualizadas exitosamente para: " + nombreAntiguo);
+                                    } else {
+                                        Log.e("ActualizarTareas", "Error actualizando las tareas", task.getException());
+                                    }
+                                }
+                            });
+                } else {
+                    Log.i("sinTareas", "Este usuario no tiene tareas registradas");
+                }
+
+                query.removeEventListener(this);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.i("ErrorLecturaBD", "Error al leer datos: " + databaseError.getMessage());
+            }
+        });
+    }
+    public boolean esPropietario(String usuarioLogado, String PropietarioTarea) {
+       return usuarioLogado.equals(PropietarioTarea);
     }
 
 
+    public void EditarTarea(String id, String nuevaDesc){
+
+        DatabaseReference tareasRef = FirebaseDatabase.getInstance(urldb).getReference().child(ruta_tarea);
+        Query query = tareasRef.orderByChild("nombre").equalTo(id);
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Map<String, Object> updates = new HashMap<>();
+                    for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+
+                        String key = childSnapshot.getKey();
+                        String rutaCompleta = ruta_tarea + "/" + key + "/descripcion";
+                        updates.put(rutaCompleta, nuevaDesc);
+                    }
+
+                    // Realizar la actualización en Firebase Database
+                    FirebaseDatabase.getInstance(urldb).getReference().updateChildren(updates);
+
+
+            }
+
+                query.removeEventListener(this);
+
+
+        }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+    });
 
 }
+
+ public String TraducirTipoTarea(String TipoTarea) {
+     switch(TipoTarea) {
+         case "Domestic":
+             TipoTarea = "Domésticas";
+             break;
+         case "Job":
+             TipoTarea = "Trabajo";
+             break;
+         case "Leisure":
+             TipoTarea = "Ocio";
+             break;
+         default:
+             Log.i("infoIdioma", "El usuario tiene el idioma en español");
+
+     }
+
+     return TipoTarea;
+ }
+
+ public void FiltrarPorTipoTarea(String TareaTipo, TareasCallBack callback) {
+
+     DatabaseReference tareasRef = FirebaseDatabase.getInstance(urldb).getReference().child(ruta_tarea);
+     Query query = tareasRef.orderByChild("Tipo_Tarea").equalTo(TareaTipo);
+
+     query.addListenerForSingleValueEvent(new ValueEventListener() {
+         @Override
+         public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+             ArrayList<Tarea> listaTareas = new ArrayList<>();
+             for (DataSnapshot tareaSnapshot : snapshot.getChildren()) {
+
+                 String nombre = tareaSnapshot.child("nombre").getValue(String.class);
+                 String descripcion = tareaSnapshot.child("descripcion").getValue(String.class);
+                 String fecha= tareaSnapshot.child("fecha").getValue(String.class);
+                 String publicador = tareaSnapshot.child("nombre_publicador").getValue(String.class);
+                 boolean completado = tareaSnapshot.child("completada").getValue(boolean.class);
+
+
+                 listaTareas.add(new Tarea(nombre, descripcion,  fecha, publicador, completado));
+             }
+             callback.onTareasLoaded(listaTareas);
+             query.removeEventListener(this);
+
+
+         }
+
+         @Override
+         public void onCancelled(@NonNull DatabaseError error) {
+
+         }
+     });
+
+
+   }
+
+}
+
+
+
+
+
+
+
+
+

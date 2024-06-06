@@ -1,8 +1,11 @@
 package com.tfg.gestiondetareas.Vista;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -23,7 +26,10 @@ public class crearTareaActivity extends AppCompatActivity {
     private EditText nombreTarea, descripcionTarea;
     private Button crear;
 
-    String usuarioLogado;
+    private RadioGroup radioGroup;
+    private String TipoTarea;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +43,7 @@ public class crearTareaActivity extends AppCompatActivity {
         });
 
         inicializarComponentes();
-        crear.setOnClickListener(v->RecogerTarea());
+
 
 
     }
@@ -48,26 +54,45 @@ public class crearTareaActivity extends AppCompatActivity {
 
         nombreTarea = findViewById(R.id.edtNombreNuevaTarea);
         descripcionTarea = findViewById(R.id.edtDescripcionTarea);
+        radioGroup = findViewById(R.id.rgTipoTarea);
         crear = findViewById(R.id.btnConfTarea);
+        crear.setOnClickListener(v->RecogerTarea());
 
     }
 
 
     //Metodo que se encargara de comprobar si hay algún valor nulo y lo enviará al controlador
     public void RecogerTarea() {
-        if(nombreTarea.getText().toString().isEmpty() || descripcionTarea.getText().toString().isEmpty()) {
+
+        int id =   radioGroup.getCheckedRadioButtonId();
+
+        RadioButton opcSeleccionada = findViewById(id);
+
+
+
+
+        if(nombreTarea.getText().toString().isEmpty() || descripcionTarea.getText().toString().isEmpty() || opcSeleccionada==null) {
             Toast.makeText(this, "Por favor, rellene todos los campos para enviar la tarea", Toast.LENGTH_LONG).show();
         } else {
+            TipoTarea = opcSeleccionada.getText().toString();
+
+
+
+
             String nombreTar = nombreTarea.getText().toString();
             String descripcionTar = descripcionTarea.getText().toString();
             cntrTareas registrarTarea = new cntrTareas(this);
+
+            TipoTarea = registrarTarea.TraducirTipoTarea(TipoTarea);
             registrarTarea.comprobarNombreTarea(nombreTar, new NombreTarInt() {
                 @Override
                 public void onResult(boolean existeTarea) {
                     if(existeTarea) {
                         Toast.makeText(crearTareaActivity.this, R.string.toastNombreTarUnico, Toast.LENGTH_SHORT).show();
                     } else {
-                        registrarTarea.AñadirTarea(nombreTar, descripcionTar);
+                        registrarTarea.AñadirTarea(nombreTar, descripcionTar, TipoTarea);
+                        finish();
+
                     }
                 }
             });
