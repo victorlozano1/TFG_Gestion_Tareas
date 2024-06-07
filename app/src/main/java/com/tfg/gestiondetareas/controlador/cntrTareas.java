@@ -278,16 +278,20 @@ public Context contexto;
    public void removerEventListener(int listenerARemover) {
 
        if(listenerARemover==1) {
-           DatabaseReference tareasRef = FirebaseDatabase.getInstance(urldb).getReference().child(ruta_tarea);
-           tareasRef.removeEventListener(listenerPorDefecto);
-           Log.i("TagListener", "Se ha borrado el filtro correctamente");
+           if(listenerPorDefecto!=null) {
+               DatabaseReference tareasRef = FirebaseDatabase.getInstance(urldb).getReference().child(ruta_tarea);
+               tareasRef.removeEventListener(listenerPorDefecto);
+               Log.i("TagListener", "Se ha borrado el filtro correctamente");
+           }
 
        }
 
        if(listenerARemover==2) {
-           DatabaseReference tareasRef = FirebaseDatabase.getInstance(urldb).getReference().child(ruta_tarea);
-           tareasRef.removeEventListener(listenerFiltro);
-           Log.i("TagListener", "Se ha borrado el filtro correctamente");
+           if(listenerFiltro!=null) {
+               DatabaseReference tareasRef = FirebaseDatabase.getInstance(urldb).getReference().child(ruta_tarea);
+               tareasRef.removeEventListener(listenerFiltro);
+               Log.i("TagListener", "Se ha borrado el filtro correctamente");
+           }
        }
 
    }
