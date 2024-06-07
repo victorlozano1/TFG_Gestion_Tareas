@@ -38,6 +38,18 @@ public class cntrAjustes extends PreferenceFragmentCompat {
                 return true; // Indica que el cambio fue manejado correctamente
             });
         }
+
+        SwitchPreference mantenerOpcionesFiltrado = findPreference("filtrado_activo");
+
+        if(mantenerOpcionesFiltrado != null) {
+
+            mantenerOpcionesFiltrado.setOnPreferenceChangeListener(((preference, newValue) -> {
+                boolean opcActivada = (boolean) newValue;
+                mantenerOpcionesFiltrado(opcActivada);
+                return true;
+            }));
+
+        }
     }
 
     private void aplicarModoOscuro(boolean activado) {
@@ -51,4 +63,13 @@ public class cntrAjustes extends PreferenceFragmentCompat {
         Toast.makeText(contexto , R.string.ReiniciarApp, Toast.LENGTH_SHORT).show();
 
     }
+
+    private void mantenerOpcionesFiltrado(boolean activado) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("mantenerfiltro", activado);
+        editor.apply();
+
+    }
+
     }

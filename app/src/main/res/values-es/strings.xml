@@ -49,4 +49,5 @@
     <string name="rbOpc3">Ocio</string>
     <string name="opcMenuFiltrar">Filtrar por:</string>
     <string name="OpcMenuNoFiltrar">No filtrar</string>
+    <string name="textoGuardarFiltrado">Mantener opciones de filtrado</string>
 </resources>

@@ -24,7 +24,7 @@
 
         <SwitchPreference
             android:defaultValue="false"
-            android:key="switch_preference_1"
-            android:title="Switch preference" />
+            android:key="filtrado_activo"
+            android:title="@string/textoGuardarFiltrado" />
     </PreferenceCategory>
 </PreferenceScreen>

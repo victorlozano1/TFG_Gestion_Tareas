@@ -47,6 +47,7 @@ public Context contexto;
    private final String urldb="https://tfggestiondetareas-default-rtdb.europe-west1.firebasedatabase.app/";
    private final String ruta_tarea="Tareas";
 
+   private ValueEventListener listenerPorDefecto, listenerFiltro;
 
 
    //Este método añadira la tarea a la base de datos
@@ -85,7 +86,7 @@ public Context contexto;
     public void retornarListaTareas(TareasCallBack callback) {
         DatabaseReference tareasRef = FirebaseDatabase.getInstance(urldb).getReference().child(ruta_tarea);
 
-        tareasRef.addValueEventListener(new ValueEventListener() {
+        listenerPorDefecto = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ArrayList<Tarea> listaTareas = new ArrayList<>();
@@ -111,7 +112,11 @@ public Context contexto;
                 // Manejar errores de lectura de la base de datos
                 Log.i("ErrorLecturaBD", "Error al leer datos: " + databaseError.getMessage());
             }
-        });
+        };
+
+        tareasRef.addValueEventListener(listenerPorDefecto);
+
+
     }
 
 
@@ -140,6 +145,8 @@ public Context contexto;
 
             }
         });
+
+
     }
 
 
@@ -167,49 +174,6 @@ public Context contexto;
 
     }
 
-    public void actualizarTareasNombreNuevo(String nombreNuevo, String nombreAntiguo) {
-        Log.d("ActualizarTareas", "Iniciando actualización de tareas para: " + nombreAntiguo);
-        DatabaseReference tareasRef = FirebaseDatabase.getInstance(urldb).getReference().child(ruta_tarea);
-        Query query = tareasRef.orderByChild("nombre_publicador").equalTo(nombreAntiguo);
-
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    Map<String, Object> updates = new HashMap<>();
-                    for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                        // Crear la ruta completa para el campo específico que queremos actualizar
-                        String key = childSnapshot.getKey();
-                        String rutaCompleta = ruta_tarea + "/" + key + "/nombre_publicador";
-                        updates.put(rutaCompleta, nombreNuevo);
-                    }
-
-                    // Realizar la actualización en Firebase Database
-                    FirebaseDatabase.getInstance(urldb).getReference().updateChildren(updates)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        Log.d("ActualizarTareas", "Tareas actualizadas exitosamente para: " + nombreAntiguo);
-                                    } else {
-                                        Log.e("ActualizarTareas", "Error actualizando las tareas", task.getException());
-                                    }
-                                }
-                            });
-                } else {
-                    Log.i("sinTareas", "Este usuario no tiene tareas registradas");
-                }
-
-                query.removeEventListener(this);
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.i("ErrorLecturaBD", "Error al leer datos: " + databaseError.getMessage());
-            }
-        });
-    }
     public boolean esPropietario(String usuarioLogado, String PropietarioTarea) {
        return usuarioLogado.equals(PropietarioTarea);
     }
@@ -271,12 +235,13 @@ public Context contexto;
      return TipoTarea;
  }
 
+
  public void FiltrarPorTipoTarea(String TareaTipo, TareasCallBack callback) {
 
      DatabaseReference tareasRef = FirebaseDatabase.getInstance(urldb).getReference().child(ruta_tarea);
      Query query = tareasRef.orderByChild("Tipo_Tarea").equalTo(TareaTipo);
 
-     query.addListenerForSingleValueEvent(new ValueEventListener() {
+     listenerFiltro = new ValueEventListener() {
          @Override
          public void onDataChange(@NonNull DataSnapshot snapshot) {
 
@@ -293,7 +258,6 @@ public Context contexto;
                  listaTareas.add(new Tarea(nombre, descripcion,  fecha, publicador, completado));
              }
              callback.onTareasLoaded(listaTareas);
-             query.removeEventListener(this);
 
 
          }
@@ -302,10 +266,32 @@ public Context contexto;
          public void onCancelled(@NonNull DatabaseError error) {
 
          }
-     });
+     };
+
+     query.addValueEventListener(listenerFiltro);
+
+
 
 
    }
+
+   public void removerEventListener(int listenerARemover) {
+
+       if(listenerARemover==1) {
+           DatabaseReference tareasRef = FirebaseDatabase.getInstance(urldb).getReference().child(ruta_tarea);
+           tareasRef.removeEventListener(listenerPorDefecto);
+           Log.i("TagListener", "Se ha borrado el filtro correctamente");
+
+       }
+
+       if(listenerARemover==2) {
+           DatabaseReference tareasRef = FirebaseDatabase.getInstance(urldb).getReference().child(ruta_tarea);
+           tareasRef.removeEventListener(listenerFiltro);
+           Log.i("TagListener", "Se ha borrado el filtro correctamente");
+       }
+
+   }
+
 
 }
 

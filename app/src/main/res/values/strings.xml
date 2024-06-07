@@ -48,4 +48,5 @@
     <string name="rbOpc3">Leisure</string>
     <string name="opcMenuFiltrar">Filter by:</string>
     <string name="OpcMenuNoFiltrar">Do not filter</string>
+    <string name="textoGuardarFiltrado">Maintain filtering options</string>
 </resources>
