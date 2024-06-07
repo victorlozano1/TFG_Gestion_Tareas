@@ -275,6 +275,7 @@ public Context contexto;
 
    }
 
+   //Método que gestionará los listeners de la base de datos
    public void removerEventListener(int listenerARemover) {
 
        if(listenerARemover==1) {
