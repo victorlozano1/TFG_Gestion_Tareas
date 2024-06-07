@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Gestion de tareas</string>
+    <string name="edtNom">Nombre de usuario</string>
+    <string name="edtCon">Introduzca su contraseña</string>
+    <string name="btnCrearCuenta">Crear cuenta</string>
+    <string name="btnSalir">Salir de la aplicación</string>
+    <string name="btnIniciarSesion">Iniciar sesión</string>
+    <string name="btnRegistrar">Registrar cuenta</string>
+    <string name="btnCancelar">Cancelar</string>
+    <string name="tvCrearCuenta">Cree su cuenta</string>
+    <string name="toastRegIncorrecto">Debe rellenar todos los campos para poder registrarse</string>
+    <string name="edtCorreo">Correo electronico</string>
+    <string name="toastiniciosesincorrecto">Debe rellenar los campos para poder iniciar sesion</string>
+    <string name="toastCorreoEnUso">Este correo electrónico ya está registrado</string>
+    <string name="toastErrorInicioSesion">"Error al iniciar sesión: correo o contraseña incorrectos "</string>
+    <string name="HintNombreNuevaTarea">Nombre de la tarea</string>
+    <string name="HintDescripcionNuevaTarea">Descripción de la tarea</string>
+    <string name="botonAñadir">Añadir</string>
+    <string name="tituloCrearTarea">Crear nueva tarea</string>
+    <string name="chCompleto">Marcar como completada</string>
+    <string name="mensajeBienvenida">Bienvenido a tu gestor de tareas</string>
+    <string name="tituloFragmentTareas">Lista de Tareas</string>
+    <string name="toastNombreTarUnico">El nombre de la tarea debe ser único</string>
+    <string name="tvFechaPubDetalle">Fecha de publicación:</string>
+    <string name="tvPublicadorDetalle">Publicador por</string>
+    <string name="opcFragmentTarea">Tareas</string>
+    <string name="opcFragmentCuenta">Cuenta</string>
+    <string name="opcFragmentAjustes">Ajustes</string>
+    <string name="ModoOscuroPreference">Habilitar modo oscuro</string>
+    <string name="ReiniciarApp">Debe reiniciar la aplicación para aplicar el tema</string>
+    <string name="NombreUsuarioPerfil">Nombre de usuario</string>
+    <string name="tituloFragmentPerfil">Perfil</string>
+    <string name="toastInicioSesionExitoso">Inicio de sesión exitoso</string>
+    <string-array name="ArraySelecciónIdioma">
+        <item>Detectar idioma</item>
+        <item>Español</item>
+        <item>Inglés</item>
+    </string-array>
+    <string name="tvSeleccionarIdioma">Seleccionar idioma</string>
+    <string name="btnAplicarCambios">Aplicar cambios</string>
+    <string name="toastEditarNombreVacio">No puede dejar el nombre de usuario vacio</string>
+    <string name="ToastEsFechaHoy">No se puede cambiar el nombre del usuario hasta dentro de 1 día</string>
+    <string name="ToastTareaNueva">Se ha añadido la tarea correctamente</string>
+    <string name="ToastDescVacio">La descripción no puede estar vacia</string>
+    <string name="ToastDescModificada">Se ha modificado la descripcion</string>
+    <string name="rbOpc1">Domésticas</string>
+    <string name="rbOpc2">Trabajo</string>
+    <string name="rbOpc3">Ocio</string>
+    <string name="opcMenuFiltrar">Filtrar por:</string>
+    <string name="OpcMenuNoFiltrar">No filtrar</string>
+</resources>

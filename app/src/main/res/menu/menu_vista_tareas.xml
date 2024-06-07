@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/opcionesMenu"
+        android:title="@string/opcMenuFiltrar">
+        <menu>
+            <item
+                android:id="@+id/opcMenuTrabajo"
+                android:title="@string/rbOpc2" />
+            <item
+                android:id="@+id/opcMenuOcio"
+                android:title="@string/rbOpc3" />
+            <item
+                android:id="@+id/opcMenuDomestico"
+                android:title="@string/rbOpc1" />
+            <item
+                android:id="@+id/opcNoFiltrar"
+                android:title="@string/OpcMenuNoFiltrar" />
+        </menu>
+    </item>
+</menu>
