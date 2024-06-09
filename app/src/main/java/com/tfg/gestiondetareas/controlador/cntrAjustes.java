@@ -2,8 +2,11 @@ package com.tfg.gestiondetareas.controlador;
 
 import static androidx.core.app.ActivityCompat.recreate;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
@@ -11,12 +14,16 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
+import androidx.preference.ListPreference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
 import androidx.preference.SwitchPreferenceCompat;
 
 import com.tfg.gestiondetareas.R;
+import com.tfg.gestiondetareas.Vista.MainActivity;
+
+import java.util.Locale;
 
 public class cntrAjustes extends PreferenceFragmentCompat {
 
@@ -50,6 +57,16 @@ public class cntrAjustes extends PreferenceFragmentCompat {
             }));
 
         }
+
+        ListPreference preferenciaIdioma = findPreference("listaIdiomas");
+
+        preferenciaIdioma.setOnPreferenceChangeListener((preference, newValue) -> {
+            String idioma = (String) newValue;
+            CambiarIdioma(idioma);
+            return true;
+        });
+
+
     }
 
     private void aplicarModoOscuro(boolean activado) {
@@ -69,6 +86,19 @@ public class cntrAjustes extends PreferenceFragmentCompat {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("mantenerfiltro", activado);
         editor.apply();
+
+    }
+
+    private void CambiarIdioma(String Idioma) {
+        // Cambiar el idioma de la aplicación
+        Context contexto = getContext().getApplicationContext();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("Idioma", Idioma);
+        editor.apply();
+        Toast.makeText(contexto , R.string.ReiniciarApp, Toast.LENGTH_SHORT).show();
+
+
 
     }
 

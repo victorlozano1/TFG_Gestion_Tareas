@@ -33,7 +33,6 @@
     <string name="tituloFragmentPerfil">Perfil</string>
     <string name="toastInicioSesionExitoso">Inicio de sesión exitoso</string>
     <string-array name="ArraySelecciónIdioma">
-        <item>Detectar idioma</item>
         <item>Español</item>
         <item>Inglés</item>
     </string-array>
@@ -50,4 +49,8 @@
     <string name="opcMenuFiltrar">Filtrar por:</string>
     <string name="OpcMenuNoFiltrar">No filtrar</string>
     <string name="textoGuardarFiltrado">Mantener opciones de filtrado</string>
+    <string name="btnCompletada">Editar Descripcion</string>
+    <string name="opcTipo">Tipo</string>
+    <string name="opcEstado">Estado</string>
+    <string name="opcCompletas">Completada</string>
 </resources>

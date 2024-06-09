@@ -23,6 +23,8 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.ViewHolder> 
     ArrayList<Tarea> listaTareas;
     Context contexto;
 
+    ConstraintLayout cv;
+
     public TareaAdapter(ArrayList<Tarea> listaTareas, Context contexto) {
         this.listaTareas = listaTareas;
         this.contexto=contexto;
@@ -42,11 +44,11 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.ViewHolder> 
         holder.Fecha.setText(listaTareas.get(position).getFecha_publicacion());
         holder.publicador.setText(listaTareas.get(position).getNombre_publicador());
 
+
+
+
         //Cuando pulsa click sobre un cardview, se dirige a una activity donde muestra en detalle la tarea
-
-
-
-        holder.cv.setOnClickListener(new View.OnClickListener() {
+        cv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -62,7 +64,11 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.ViewHolder> 
             }
         });
 
+
     }
+
+
+
 
     @Override
     public int getItemCount() {
@@ -72,8 +78,7 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.ViewHolder> 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView Tarea, Fecha, publicador;
-        CheckBox completado;
-        ConstraintLayout cv;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             Tarea=itemView.findViewById(R.id.tvNomTarea);
@@ -82,5 +87,8 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.ViewHolder> 
             cv=itemView.findViewById(R.id.clayCardView);
 
         }
+
     }
+
+
 }

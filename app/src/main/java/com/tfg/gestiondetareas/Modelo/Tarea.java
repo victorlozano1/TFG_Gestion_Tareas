@@ -16,14 +16,24 @@ public class Tarea {
 
     private boolean Completada;
 
+    private String TipoTarea;
 
 
-    public Tarea(String nombre, String descripcion, String fecha_publicacion, String nombre_publicador, boolean completo) {
+    public Tarea(String nombre, String descripcion, String fecha_publicacion, String nombre_publicador, boolean completo, String TipoTarea) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.Fecha_publicacion = fecha_publicacion;
         this.nombre_publicador = nombre_publicador;
         this.Completada = completo;
+        this.TipoTarea = TipoTarea;
+    }
+
+    public String getTipoTarea() {
+        return TipoTarea;
+    }
+
+    public void setTipoTarea(String tipoTarea) {
+        TipoTarea = tipoTarea;
     }
 
     public String getIdTarea() {

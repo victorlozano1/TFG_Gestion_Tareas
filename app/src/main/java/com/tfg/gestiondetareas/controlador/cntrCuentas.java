@@ -56,6 +56,9 @@ public class cntrCuentas {
 
         auth = FirebaseAuth.getInstance();
 
+
+
+
         auth.createUserWithEmailAndPassword(email, contrasenia)
 
 
@@ -63,10 +66,10 @@ public class cntrCuentas {
                     if (task.isSuccessful()) {
                         // Registro exitoso
                         FirebaseUser user = auth.getCurrentUser();
+                        user.sendEmailVerification();
+                        Toast.makeText(contexto, "Se ha enviado un correo electrónico de verificación",Toast.LENGTH_LONG);
+
                  
-
-
-
 
                         //Si el usuario es distinto de nulo, entonces se guardarán los datos registrados en la base de datos (salvo la contraseña)
                         if (user != null) {
@@ -78,12 +81,12 @@ public class cntrCuentas {
                             nuevoUsuario.put("Correo", email);
                             nuevoUsuario.put("nombre_usuario", nombreusuario);
                             userRef.child(clave).setValue(nuevoUsuario);
+                            Log.i("registroCorrecto", "Se ha registrado el usuario:" + nombreusuario);
+                            Intent intent = new Intent().setClass(contexto, MainActivity.class);
+                            contexto.startActivity(intent);
                         }
 
-                        Log.i("registroCorrecto", "Se ha registrado el usuario:" + nombreusuario);
 
-                        Intent intent = new Intent().setClass(contexto, MainActivity.class);
-                        contexto.startActivity(intent);
 
                     } else {
 

@@ -2,7 +2,9 @@ package com.tfg.gestiondetareas.Vista;
 
 import android.health.connect.datatypes.units.Length;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,16 +16,19 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.tfg.gestiondetareas.Modelo.Usuario;
 import com.tfg.gestiondetareas.R;
+import com.tfg.gestiondetareas.controlador.NombreTarInt;
 import com.tfg.gestiondetareas.controlador.UsuarioCallBack;
 import com.tfg.gestiondetareas.controlador.cntrCuentas;
 import com.tfg.gestiondetareas.controlador.cntrTareas;
 
 public class DetalleTareaActivity extends AppCompatActivity {
 
-    TextView tvDescripcion, tvTituloTarea, tvfechapub, tvnombrepub;
-    String nombre, desc, fechapub, nombrepub;
+    private TextView tvDescripcion, tvTituloTarea, tvfechapub, tvnombrepub;
+    private String nombre, desc, fechapub, nombrepub;
 
     private Button btnEditarDesc;
+
+    private CheckBox chCompleta;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +51,7 @@ public class DetalleTareaActivity extends AppCompatActivity {
         tvnombrepub = findViewById(R.id.tvPublicadorDato);
         btnEditarDesc = findViewById(R.id.btnEditarTarea);
         btnEditarDesc.setOnClickListener(v->aplicarCambiosTarea());
+        chCompleta = findViewById(R.id.chCompletada);
         comprobarPropTarea();
 
         nombre = getIntent().getStringExtra("NombreTareaDetalle");
@@ -62,6 +68,8 @@ public class DetalleTareaActivity extends AppCompatActivity {
 
     }
 
+
+    //Método que compara si el usuario logado es el propietario de una tarea en especifico
     private void comprobarPropTarea() {
         cntrCuentas usuarioLogado = new cntrCuentas();
         cntrTareas prop = new cntrTareas();
@@ -74,18 +82,34 @@ public class DetalleTareaActivity extends AppCompatActivity {
               boolean esProp = prop.esPropietario(nombre_usuario, tvnombrepub.getText().toString());
 
               if(esProp) {
+
+                  //Comprueba si esta consultando una tarea que esta completada, para que no pueda editarla nuevamente
                   btnEditarDesc.setEnabled(true);
                   tvDescripcion.setEnabled(true);
-              }
+                  chCompleta.setEnabled(true);
 
-              else {
-                  btnEditarDesc.setEnabled(false);
+
+               }
+                 else {
+
+                  btnEditarDesc.setVisibility(View.INVISIBLE);
+                  chCompleta.setVisibility(View.INVISIBLE);
                   tvDescripcion.setEnabled(false);
-              }
 
+              }
             }
         });
-    }
+
+              }
+
+
+
+
+
+
+
+
+    //Método que aplicara los cambios que se hayan hecho en la descripción
 
     private void aplicarCambiosTarea() {
 
@@ -96,9 +120,15 @@ public class DetalleTareaActivity extends AppCompatActivity {
        }
 
        else {
-           cntrTareas editarDesc = new cntrTareas();
+           cntrTareas editar= new cntrTareas();
 
-           editarDesc.EditarTarea(tvTituloTarea.getText().toString(), nuevaDesc);
+           editar.EditarTarea(tvTituloTarea.getText().toString(), nuevaDesc);
+
+           if(chCompleta.isChecked()) {
+               boolean completo = chCompleta.isChecked();
+               editar.marcarTareaComoCompleta(completo, tvTituloTarea.getText().toString());
+           }
+
            Toast.makeText(this, R.string.ToastDescModificada, Toast.LENGTH_SHORT).show();
        }
     }

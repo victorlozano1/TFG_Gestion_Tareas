@@ -32,7 +32,6 @@
     <string name="toastErrorInicioSesion">Login error: incorrect email or password</string>
     <string name="toastInicioSesionExitoso">Login successful</string>
     <string-array name="ArraySelecciónIdioma">
-        <item>Default</item>
         <item>Spanish</item>
         <item>English</item>
     </string-array>
@@ -49,4 +48,8 @@
     <string name="opcMenuFiltrar">Filter by:</string>
     <string name="OpcMenuNoFiltrar">Do not filter</string>
     <string name="textoGuardarFiltrado">Maintain filtering options</string>
+    <string name="btnCompletada">Edit Description</string>
+    <string name="opcTipo">Type</string>
+    <string name="opcEstado">Status</string>
+    <string name="opcCompletas">Completed</string>
 </resources>

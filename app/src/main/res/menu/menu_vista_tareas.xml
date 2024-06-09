@@ -4,18 +4,29 @@
         android:id="@+id/opcionesMenu"
         android:title="@string/opcMenuFiltrar">
         <menu>
-            <item
-                android:id="@+id/opcMenuTrabajo"
-                android:title="@string/rbOpc2" />
-            <item
-                android:id="@+id/opcMenuOcio"
-                android:title="@string/rbOpc3" />
-            <item
-                android:id="@+id/opcMenuDomestico"
-                android:title="@string/rbOpc1" />
-            <item
-                android:id="@+id/opcNoFiltrar"
-                android:title="@string/OpcMenuNoFiltrar" />
+            <item android:title="@string/opcTipo">
+                <menu>
+                    <item
+                        android:id="@+id/opcMenuTrabajo"
+                        android:title="@string/rbOpc2" />
+                    <item
+                        android:id="@+id/opcMenuOcio"
+                        android:title="@string/rbOpc3" />
+                    <item
+                        android:id="@+id/opcMenuDomestico"
+                        android:title="@string/rbOpc1" />
+                </menu>
+            </item>
+            <item android:title="@string/opcEstado" >
+                <menu >
+                    <item
+                        android:id="@+id/opcCompletas"
+                        android:title="@string/opcCompletas" />
+                </menu>
+            </item>
         </menu>
     </item>
+    <item
+        android:id="@+id/opcNoFiltrar"
+        android:title="@string/OpcMenuNoFiltrar" />
 </menu>

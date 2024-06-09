@@ -57,6 +57,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTextoFecha" />
 
+    <CheckBox
+        android:id="@+id/chCompletada"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="@string/chCompleto"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvPublicadorDetalle" />
+
     <TextView
         android:id="@+id/tvPublicadorDato"
         android:layout_width="wrap_content"

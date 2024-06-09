@@ -22,8 +22,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.ValueEventListener;
 import com.tfg.gestiondetareas.Modelo.Tarea;
 import com.tfg.gestiondetareas.R;
+import com.tfg.gestiondetareas.controlador.ListenersCallBack;
 import com.tfg.gestiondetareas.controlador.TareasCallBack;
 import com.tfg.gestiondetareas.controlador.cntrTareas;
 
@@ -41,6 +43,8 @@ public class vistaFragmentTareas extends Fragment {
     private SharedPreferences preferences;
 
     private boolean filtroGuardado;
+
+    private ValueEventListener listenerglobal;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -93,7 +97,12 @@ public class vistaFragmentTareas extends Fragment {
         }
         else {
             cntrTareas tar = new cntrTareas(view.getContext());
-            tar.retornarListaTareas(new TareasCallBack() {
+            tar.retornarListaTareas(new ListenersCallBack() {
+                @Override
+                public void listenerObtenido(ValueEventListener listener) {
+
+                }
+            }, new TareasCallBack() {
                 @Override
                 public void onTareasLoaded(ArrayList<Tarea> tareas) {
                     listaTareas = tareas;
@@ -111,7 +120,12 @@ public class vistaFragmentTareas extends Fragment {
         //Comprobar si el usuario decidió no filtrar
         if(filtro.equals("No filtrar") || filtro.equals("Do not filter")) {
             cntrTareas consulta = new cntrTareas();
-            consulta.retornarListaTareas(new TareasCallBack() {
+            consulta.retornarListaTareas(new ListenersCallBack() {
+                @Override
+                public void listenerObtenido(ValueEventListener listener) {
+
+                }
+            }, new TareasCallBack() {
                 @Override
                 public void onTareasLoaded(ArrayList<Tarea> tareas) {
                     listaTareas = tareas;
@@ -123,17 +137,49 @@ public class vistaFragmentTareas extends Fragment {
 
         else {
 
+
             cntrTareas consulta = new cntrTareas();
 
             Log.i("StringFiltro", filtro);
-            consulta.FiltrarPorTipoTarea(filtro, new TareasCallBack() {
-                @Override
-                public void onTareasLoaded(ArrayList<Tarea> tareas) {
-                    listaTareas = tareas;
-                    Adaptador = new TareaAdapter(listaTareas, view.getContext());
-                    mostrarRecyclerView();
-                }
-            });
+
+            if (filtro.equals("Completada") || filtro.equals("Completed")) {
+                consulta.retornarListaTareas(new ListenersCallBack() {
+                    @Override
+                    public void listenerObtenido(ValueEventListener listener) {
+
+                    }
+                }, new TareasCallBack() {
+                    @Override
+                    public void onTareasLoaded(ArrayList<Tarea> tareas) {
+                        listaTareas = tareas;
+                        Adaptador = new TareaAdapter(listaTareas, view.getContext());
+                        mostrarRecyclerView();
+                        consulta.ordenarPorCompletadas(listaTareas,Adaptador);
+                    }
+                });
+
+            }
+            else {
+
+                consulta.retornarListaTareas(new ListenersCallBack() {
+                    @Override
+                    public void listenerObtenido(ValueEventListener listener) {
+
+                    }
+                }, new TareasCallBack() {
+                    @Override
+                    public void onTareasLoaded(ArrayList<Tarea> tareas) {
+                        listaTareas = tareas;
+                        Adaptador = new TareaAdapter(listaTareas, view.getContext());
+                        mostrarRecyclerView();
+                        consulta.OrdenarPorTipoTarea(filtro, listaTareas, Adaptador);
+                    }
+                });
+
+
+
+            }
+
         }
     }
 
@@ -184,13 +230,14 @@ public class vistaFragmentTareas extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    //Gestiona las opciones del menú
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId()==R.id.opcMenuTrabajo){
 
             cntrTareas consulta = new cntrTareas();
             String TipoTarea =  item.getTitle().toString();
-            consulta.removerEventListener(1);
+
 
 
             //Guardo el string en las sharedpreferences si esta guardado si el usuario tiene activada la opción
@@ -199,19 +246,14 @@ public class vistaFragmentTareas extends Fragment {
                 editor.putString("filtroguardado", TipoTarea);
                 editor.apply();
             }
-            consulta.FiltrarPorTipoTarea(TipoTarea, new TareasCallBack() {
-                @Override
-                public void onTareasLoaded(ArrayList<Tarea> tareas) {
-                    listaTareas = tareas;
-                    Adaptador = new TareaAdapter(listaTareas, view.getContext());
-                    mostrarRecyclerView();
-                }
-            });
+
+            consulta.OrdenarPorTipoTarea(TipoTarea, listaTareas, Adaptador);
+
         }
         if(item.getItemId()==R.id.opcMenuDomestico){
             cntrTareas consulta = new cntrTareas();
             String TipoTarea =  item.getTitle().toString();
-            consulta.removerEventListener(1);
+
 
             //Guardo el string en las sharedpreferences si esta guardado si el usuario tiene activada la opción
             if(filtroGuardado) {
@@ -219,19 +261,14 @@ public class vistaFragmentTareas extends Fragment {
                 editor.putString("filtroguardado", TipoTarea);
                 editor.apply();
             }
-            consulta.FiltrarPorTipoTarea(TipoTarea, new TareasCallBack() {
-                @Override
-                public void onTareasLoaded(ArrayList<Tarea> tareas) {
-                    listaTareas = tareas;
-                    Adaptador = new TareaAdapter(listaTareas, view.getContext());
-                    mostrarRecyclerView();
-                }
-            });
+
+            consulta.OrdenarPorTipoTarea(TipoTarea, listaTareas, Adaptador);
+
         }
         if(item.getItemId()==R.id.opcMenuOcio){
             cntrTareas consulta = new cntrTareas();
             String TipoTarea =  item.getTitle().toString();
-            consulta.removerEventListener(1);
+           // consulta.removerEventListener(1);
 
             //Guardo el string en las sharedpreferences si esta guardado si el usuario tiene activada la opción
             if(filtroGuardado) {
@@ -240,27 +277,49 @@ public class vistaFragmentTareas extends Fragment {
                 editor.putString("filtroguardado", TipoTarea);
                 editor.apply();
             }
-            consulta.FiltrarPorTipoTarea(TipoTarea, new TareasCallBack() {
-                @Override
-                public void onTareasLoaded(ArrayList<Tarea> tareas) {
-                    listaTareas = tareas;
-                    Adaptador = new TareaAdapter(listaTareas, view.getContext());
-                    mostrarRecyclerView();
-                }
-            });
+
+
+            consulta.OrdenarPorTipoTarea(TipoTarea, listaTareas, Adaptador);
+
+        }
+
+        if(item.getItemId()==R.id.opcCompletas) {
+
+            cntrTareas consulta = new cntrTareas();
+            String TareasCompletadas =  item.getTitle().toString();
+
+            if(filtroGuardado) {
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("filtroguardado", TareasCompletadas);
+                editor.apply();
+            }
+
+            consulta.ordenarPorCompletadas(listaTareas, Adaptador);
+
+
+
         }
 
         if(item.getItemId()==R.id.opcNoFiltrar) {
             cntrTareas consulta = new cntrTareas();
             String TipoTarea =  item.getTitle().toString();
-            consulta.removerEventListener(2);
+
 
             if(filtroGuardado) {
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("filtroguardado", TipoTarea);
                 editor.apply();
             }
-            consulta.retornarListaTareas(new TareasCallBack() {
+            consulta.retornarListaTareas(new ListenersCallBack() {
+                @Override
+                public void listenerObtenido(ValueEventListener listener) {
+
+                    consulta.removerEventListener(listenerglobal);
+                    listenerglobal = listener;
+
+
+                }
+            },new TareasCallBack() {
                 @Override
                 public void onTareasLoaded(ArrayList<Tarea> tareas) {
                     listaTareas = tareas;
@@ -268,6 +327,9 @@ public class vistaFragmentTareas extends Fragment {
                     mostrarRecyclerView();
                 }
             });
+
+
+
         }
 
 
