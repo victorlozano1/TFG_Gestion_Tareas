@@ -57,4 +57,5 @@
     <string name="ToastEnviarTarea">Por favor, rellene todos los campos para enviar la tarea</string>
     <string name="ToastPermisos">La aplicación no tiene permisos para acceder a los archivos multimedia, por favor, ve a los ajustes de privacidad</string>
     <string name="ToastBorrarTarea">No puede borrar la tarea porque no es el propietario de ella</string>
+    <string name="toastPermisoDennied">Se han rechazado los permisos</string>
 </resources>

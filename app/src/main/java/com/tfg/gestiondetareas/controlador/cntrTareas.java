@@ -82,10 +82,13 @@ public class cntrTareas {
 
     // Método que recogerá todas las tareas almacenadas en la base de datos y lo retornará como lista
     public void retornarListaTareas(ListenersCallBack listener, TareasCallBack callback) {
-
         DatabaseReference tareasRef = FirebaseDatabase.getInstance(urldb).getReference().child(ruta_tarea);
+        // Remover el listener anterior si existe
+        if (listenerPorDefecto != null) {
+            tareasRef.removeEventListener(listenerPorDefecto);
+        }
 
-
+        // Definir el nuevo listener
         listenerPorDefecto = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -99,7 +102,7 @@ public class cntrTareas {
                     String correo_publicador = tareaSnapshot.child("correo_publicador").getValue(String.class);
                     boolean completado = tareaSnapshot.child("completada").getValue(boolean.class);
 
-                    listaTareas.add(new Tarea(nombre, descripcion, fecha, publicador, completado,TareaTipo, correo_publicador));
+                    listaTareas.add(new Tarea(nombre, descripcion, fecha, publicador, completado, TareaTipo, correo_publicador));
                 }
                 callback.onTareasLoaded(listaTareas);
                 listener.listenerObtenido(listenerPorDefecto);
@@ -112,9 +115,10 @@ public class cntrTareas {
             }
         };
 
+        // Agregar el nuevo listener
         tareasRef.addValueEventListener(listenerPorDefecto);
-
     }
+
 
     public void BorrarTarea(String Id) {
         DatabaseReference tareasRef = FirebaseDatabase.getInstance(urldb).getReference().child(ruta_tarea);
@@ -274,28 +278,7 @@ public class cntrTareas {
         });
     }
 
-    public void EstaCompletada(String Id, NombreTarInt completa) {
-        DatabaseReference tareasRef = FirebaseDatabase.getInstance(urldb).getReference().child(ruta_tarea);
-        Query query = tareasRef.orderByChild("nombre").equalTo(Id);
 
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                        boolean completado = childSnapshot.child("completada").getValue(boolean.class);
-                        completa.onResult(completado);
-                    }
-                }
-                query.removeEventListener(this);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.i("ErrorLecturaBD", "Error al leer datos: " + error.getMessage());
-            }
-        });
-    }
 
     public void ordenarPorCompletadas(ArrayList<Tarea> Lista, TareaAdapter adapter) {
 

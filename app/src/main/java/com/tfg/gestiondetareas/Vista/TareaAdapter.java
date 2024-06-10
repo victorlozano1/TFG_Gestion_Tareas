@@ -3,6 +3,7 @@ package com.tfg.gestiondetareas.Vista;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +61,7 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.ViewHolder> 
                 intent.putExtra("NombrePublicadorDetalle",listaTareas.get(position).getNombre_publicador());
                 intent.putExtra("Correo_publicador", listaTareas.get(position).getCorreo_publicador());
                 intent.putExtra("Completada", listaTareas.get(position).isCompletada());
+                Log.i("Tarea_enviada", listaTareas.get(position).getNombre());
                 contexto.startActivity(intent);
 
             }

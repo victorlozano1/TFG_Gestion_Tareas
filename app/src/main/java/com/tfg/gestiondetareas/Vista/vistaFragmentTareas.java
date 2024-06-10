@@ -251,8 +251,9 @@ public class vistaFragmentTareas extends Fragment {
                                 }
 
                                 else {
-                                    filtroActual = consulta.TraducirTipoTarea(filtroActual);
-                                    consulta.OrdenarPorTipoTarea(filtroActual, listaTareas, Adaptador);
+                                        filtroActual = consulta.TraducirTipoTarea(filtroActual);
+                                        consulta.OrdenarPorTipoTarea(filtroActual, listaTareas, Adaptador);
+
                                 }
                             }
 
@@ -301,7 +302,25 @@ public class vistaFragmentTareas extends Fragment {
             TipoTarea = consulta.TraducirTipoTarea(TipoTarea);
             filtroActual = TipoTarea;
 
-            consulta.OrdenarPorTipoTarea(TipoTarea, listaTareas, Adaptador);
+            String  TipoTareaActual = consulta.TraducirTipoTarea(TipoTarea);
+
+            consulta.retornarListaTareas(new ListenersCallBack() {
+                @Override
+                public void listenerObtenido(ValueEventListener listener) {
+
+
+
+                }
+            }, new TareasCallBack() {
+                @Override
+                public void onTareasLoaded(ArrayList<Tarea> tareas) {
+                    listaTareas = tareas;
+                    Adaptador = new TareaAdapter(listaTareas, view.getContext());
+                    mostrarRecyclerView();
+                    consulta.OrdenarPorTipoTarea(TipoTareaActual, listaTareas, Adaptador);
+                }
+            });
+
 
         }
         if(item.getItemId()==R.id.opcMenuDomestico){
@@ -318,7 +337,25 @@ public class vistaFragmentTareas extends Fragment {
             TipoTarea = consulta.TraducirTipoTarea(TipoTarea);
 
             filtroActual = TipoTarea;
-            consulta.OrdenarPorTipoTarea(TipoTarea, listaTareas, Adaptador);
+            String  TipoTareaActual = consulta.TraducirTipoTarea(TipoTarea);
+
+            consulta.retornarListaTareas(new ListenersCallBack() {
+                @Override
+                public void listenerObtenido(ValueEventListener listener) {
+
+
+
+                }
+            }, new TareasCallBack() {
+                @Override
+                public void onTareasLoaded(ArrayList<Tarea> tareas) {
+                    listaTareas = tareas;
+                    Adaptador = new TareaAdapter(listaTareas, view.getContext());
+                    mostrarRecyclerView();
+                    consulta.OrdenarPorTipoTarea(TipoTareaActual, listaTareas, Adaptador);
+                }
+            });
+
 
 
         }
@@ -336,10 +373,26 @@ public class vistaFragmentTareas extends Fragment {
             }
 
             filtroActual = TipoTarea;
-            TipoTarea = consulta.TraducirTipoTarea(TipoTarea);
+          String  TipoTareaActual = consulta.TraducirTipoTarea(TipoTarea);
+
+            consulta.retornarListaTareas(new ListenersCallBack() {
+                @Override
+                public void listenerObtenido(ValueEventListener listener) {
 
 
-            consulta.OrdenarPorTipoTarea(TipoTarea, listaTareas, Adaptador);
+
+                }
+            }, new TareasCallBack() {
+                @Override
+                public void onTareasLoaded(ArrayList<Tarea> tareas) {
+                    listaTareas = tareas;
+                    Adaptador = new TareaAdapter(listaTareas, view.getContext());
+                    mostrarRecyclerView();
+                    consulta.OrdenarPorTipoTarea(TipoTareaActual, listaTareas, Adaptador);
+                }
+            });
+
+
 
         }
 
@@ -354,8 +407,22 @@ public class vistaFragmentTareas extends Fragment {
                 editor.apply();
             }
 
-            filtroActual = TareasCompletadas;
-            consulta.ordenarPorCompletadas(listaTareas, Adaptador);
+            consulta.retornarListaTareas(new ListenersCallBack() {
+                @Override
+                public void listenerObtenido(ValueEventListener listener) {
+
+
+
+                }
+            }, new TareasCallBack() {
+                @Override
+                public void onTareasLoaded(ArrayList<Tarea> tareas) {
+                    listaTareas = tareas;
+                    Adaptador = new TareaAdapter(listaTareas, view.getContext());
+                    mostrarRecyclerView();
+                    consulta.ordenarPorCompletadas(listaTareas, Adaptador);
+                }
+            });
 
 
 
@@ -377,8 +444,7 @@ public class vistaFragmentTareas extends Fragment {
                 @Override
                 public void listenerObtenido(ValueEventListener listener) {
 
-                    consulta.removerEventListener(listenerglobal);
-                    listenerglobal = listener;
+
 
 
                 }
