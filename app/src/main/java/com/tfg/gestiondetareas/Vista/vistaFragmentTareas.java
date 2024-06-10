@@ -243,21 +243,6 @@ public class vistaFragmentTareas extends Fragment {
                             Adaptador.notifyItemChanged(position);
                             Toast.makeText(getContext(), R.string.ToastBorrarTarea, Toast.LENGTH_LONG).show();
 
-                            //Vuelve a filtrar para que no pierda el orden pédido por el usuario
-                            cntrTareas consulta = new cntrTareas();
-                            if(filtroActual!=null) {
-                                if(filtroActual.equals("Completada") || filtroActual.equals("Completed")) {
-                                    consulta.ordenarPorCompletadas(listaTareas, Adaptador);
-                                }
-
-                                else {
-                                        filtroActual = consulta.TraducirTipoTarea(filtroActual);
-                                        consulta.OrdenarPorTipoTarea(filtroActual, listaTareas, Adaptador);
-
-                                }
-                            }
-
-
 
                         }
                     }

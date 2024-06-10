@@ -169,6 +169,7 @@ public class DetalleTareaActivity extends AppCompatActivity {
            editar.EditarTarea(tvTituloTarea.getText().toString(), nuevaDesc);
 
            if(chCompleta.isChecked()) {
+               btnEditar.setVisibility(View.INVISIBLE);
                boolean completo = chCompleta.isChecked();
                editar.marcarTareaComoCompleta(completo, tvTituloTarea.getText().toString());
            }
