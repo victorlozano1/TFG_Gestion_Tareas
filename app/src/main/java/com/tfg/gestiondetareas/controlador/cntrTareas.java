@@ -81,7 +81,8 @@ public class cntrTareas {
     }
 
     // Método que recogerá todas las tareas almacenadas en la base de datos y lo retornará como lista
-    public void retornarListaTareas( ListenersCallBack listener, TareasCallBack callback) {
+    public void retornarListaTareas(ListenersCallBack listener, TareasCallBack callback) {
+
         DatabaseReference tareasRef = FirebaseDatabase.getInstance(urldb).getReference().child(ruta_tarea);
 
 

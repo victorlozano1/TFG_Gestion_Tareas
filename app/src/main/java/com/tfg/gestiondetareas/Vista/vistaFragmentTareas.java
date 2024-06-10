@@ -49,6 +49,8 @@ public class vistaFragmentTareas extends Fragment {
     private boolean filtroGuardado;
 
     private ValueEventListener listenerglobal;
+
+    private String filtroActual;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -127,8 +129,7 @@ public class vistaFragmentTareas extends Fragment {
             consulta.retornarListaTareas(new ListenersCallBack() {
                 @Override
                 public void listenerObtenido(ValueEventListener listener) {
-                    consulta.removerEventListener(listenerglobal);
-                    listenerglobal = listener;
+
                 }
             }, new TareasCallBack() {
                 @Override
@@ -151,8 +152,8 @@ public class vistaFragmentTareas extends Fragment {
                 consulta.retornarListaTareas(new ListenersCallBack() {
                     @Override
                     public void listenerObtenido(ValueEventListener listener) {
-                        consulta.removerEventListener(listenerglobal);
-                        listenerglobal = listener;
+
+
 
                     }
                 }, new TareasCallBack() {
@@ -165,14 +166,15 @@ public class vistaFragmentTareas extends Fragment {
                     }
                 });
 
+                filtroActual = filtro;
+
             }
             else {
 
                 consulta.retornarListaTareas(new ListenersCallBack() {
                     @Override
                     public void listenerObtenido(ValueEventListener listener) {
-                        consulta.removerEventListener(listenerglobal);
-                        listenerglobal = listener;
+
 
                     }
                 }, new TareasCallBack() {
@@ -181,10 +183,12 @@ public class vistaFragmentTareas extends Fragment {
                         listaTareas = tareas;
                         Adaptador = new TareaAdapter(listaTareas, view.getContext());
                         mostrarRecyclerView();
-                        consulta.TraducirTipoTarea(filtro);
-                        consulta.OrdenarPorTipoTarea(filtro, listaTareas, Adaptador);
+                       String filtroTrad = consulta.TraducirTipoTarea(filtro);
+                       consulta.OrdenarPorTipoTarea(filtroTrad, listaTareas, Adaptador);
                     }
                 });
+
+                filtroActual = filtro;
 
 
 
@@ -238,6 +242,22 @@ public class vistaFragmentTareas extends Fragment {
                             // Si el usuario no es propietario, vuelve a insertar el item en la lista
                             Adaptador.notifyItemChanged(position);
                             Toast.makeText(getContext(), R.string.ToastBorrarTarea, Toast.LENGTH_LONG).show();
+
+                            //Vuelve a filtrar para que no pierda el orden pédido por el usuario
+                            cntrTareas consulta = new cntrTareas();
+                            if(filtroActual!=null) {
+                                if(filtroActual.equals("Completada") || filtroActual.equals("Completed")) {
+                                    consulta.ordenarPorCompletadas(listaTareas, Adaptador);
+                                }
+
+                                else {
+                                    filtroActual = consulta.TraducirTipoTarea(filtroActual);
+                                    consulta.OrdenarPorTipoTarea(filtroActual, listaTareas, Adaptador);
+                                }
+                            }
+
+
+
                         }
                     }
                 });
@@ -279,6 +299,7 @@ public class vistaFragmentTareas extends Fragment {
                 editor.apply();
             }
             TipoTarea = consulta.TraducirTipoTarea(TipoTarea);
+            filtroActual = TipoTarea;
 
             consulta.OrdenarPorTipoTarea(TipoTarea, listaTareas, Adaptador);
 
@@ -296,13 +317,15 @@ public class vistaFragmentTareas extends Fragment {
             }
             TipoTarea = consulta.TraducirTipoTarea(TipoTarea);
 
+            filtroActual = TipoTarea;
             consulta.OrdenarPorTipoTarea(TipoTarea, listaTareas, Adaptador);
+
 
         }
         if(item.getItemId()==R.id.opcMenuOcio){
             cntrTareas consulta = new cntrTareas();
             String TipoTarea =  item.getTitle().toString();
-           // consulta.removerEventListener(1);
+
 
             //Guardo el string en las sharedpreferences si esta guardado si el usuario tiene activada la opción
             if(filtroGuardado) {
@@ -311,6 +334,8 @@ public class vistaFragmentTareas extends Fragment {
                 editor.putString("filtroguardado", TipoTarea);
                 editor.apply();
             }
+
+            filtroActual = TipoTarea;
             TipoTarea = consulta.TraducirTipoTarea(TipoTarea);
 
 
@@ -329,6 +354,7 @@ public class vistaFragmentTareas extends Fragment {
                 editor.apply();
             }
 
+            filtroActual = TareasCompletadas;
             consulta.ordenarPorCompletadas(listaTareas, Adaptador);
 
 
@@ -345,6 +371,8 @@ public class vistaFragmentTareas extends Fragment {
                 editor.putString("filtroguardado", TipoTarea);
                 editor.apply();
             }
+
+            filtroActual = TipoTarea;
             consulta.retornarListaTareas(new ListenersCallBack() {
                 @Override
                 public void listenerObtenido(ValueEventListener listener) {
