@@ -1,5 +1,6 @@
 package com.tfg.gestiondetareas.controlador;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
@@ -59,6 +60,7 @@ public class cntrTareas {
             public void onUsuarioRecogido(Usuario usuario) {
                 // Se ejecuta cuando se recoge el usuario correctamente
                 String nombrePublicador = usuario.getNombre(); // Obtiene el nombre del usuario
+                String correoPublicador = usuario.getCorreo_electronico();
                 // Crea un mapa con los datos de la nueva tarea
                 Map<String, Object> nuevaTarea = new HashMap<>();
                 nuevaTarea.put("nombre", nombreTarea);
@@ -68,11 +70,12 @@ public class cntrTareas {
                 nuevaTarea.put("Tipo_Tarea", tipoTarea);
                 nuevaTarea.put("completada", false);
                 nuevaTarea.put("nombre_publicador", nombrePublicador); // Usa el nombre del usuario obtenido
+                nuevaTarea.put("correo_publicador", correoPublicador); // Usa el correo del usuario obtenido
 
                 // Guarda la nueva tarea en la base de datos
                 tareasRef.child(clave).setValue(nuevaTarea);
                 // Tarea añadida correctamente
-                Toast.makeText(contexto.getApplicationContext(), R.string.ToastTareaNueva, Toast.LENGTH_SHORT).show();
+                Toast.makeText(contexto, R.string.ToastTareaNueva, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -92,9 +95,10 @@ public class cntrTareas {
                     String fecha = tareaSnapshot.child("fecha").getValue(String.class);
                     String publicador = tareaSnapshot.child("nombre_publicador").getValue(String.class);
                     String TareaTipo = tareaSnapshot.child("Tipo_Tarea").getValue(String.class);
+                    String correo_publicador = tareaSnapshot.child("correo_publicador").getValue(String.class);
                     boolean completado = tareaSnapshot.child("completada").getValue(boolean.class);
 
-                    listaTareas.add(new Tarea(nombre, descripcion, fecha, publicador, completado,TareaTipo));
+                    listaTareas.add(new Tarea(nombre, descripcion, fecha, publicador, completado,TareaTipo, correo_publicador));
                 }
                 callback.onTareasLoaded(listaTareas);
                 listener.listenerObtenido(listenerPorDefecto);
@@ -157,6 +161,8 @@ public class cntrTareas {
     public boolean esPropietario(String usuarioLogado, String PropietarioTarea) {
         return usuarioLogado.equals(PropietarioTarea);
     }
+
+
 
     public void EditarTarea(String id, String nuevaDesc) {
         DatabaseReference tareasRef = FirebaseDatabase.getInstance(urldb).getReference().child(ruta_tarea);

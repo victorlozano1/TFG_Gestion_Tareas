@@ -70,14 +70,14 @@ public class cntrAjustes extends PreferenceFragmentCompat {
     }
 
     private void aplicarModoOscuro(boolean activado) {
-        Context contexto = getContext().getApplicationContext();
+
 
         // Guardar el estado del modo oscuro en SharedPreferences
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("modo_oscuro", activado);
         editor.apply();
-        Toast.makeText(contexto , R.string.ReiniciarApp, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext()  , R.string.ReiniciarApp, Toast.LENGTH_SHORT).show();
 
     }
 
@@ -91,12 +91,11 @@ public class cntrAjustes extends PreferenceFragmentCompat {
 
     private void CambiarIdioma(String Idioma) {
         // Cambiar el idioma de la aplicación
-        Context contexto = getContext().getApplicationContext();
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("Idioma", Idioma);
         editor.apply();
-        Toast.makeText(contexto , R.string.ReiniciarApp, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext() , R.string.ReiniciarApp, Toast.LENGTH_SHORT).show();
 
 
 

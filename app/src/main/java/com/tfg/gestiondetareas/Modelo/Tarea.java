@@ -1,10 +1,5 @@
 package com.tfg.gestiondetareas.Modelo;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-
 public class Tarea {
 
     private String IdTarea;
@@ -18,18 +13,30 @@ public class Tarea {
 
     private String TipoTarea;
 
+    private String correo_publicador;
 
-    public Tarea(String nombre, String descripcion, String fecha_publicacion, String nombre_publicador, boolean completo, String TipoTarea) {
+    public Tarea(String nombre, String descripcion, String fecha_publicacion, String nombre_publicador, boolean completo, String TipoTarea, String correo_publicador) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.Fecha_publicacion = fecha_publicacion;
         this.nombre_publicador = nombre_publicador;
         this.Completada = completo;
         this.TipoTarea = TipoTarea;
+        this.correo_publicador = correo_publicador;
     }
+
+
 
     public String getTipoTarea() {
         return TipoTarea;
+    }
+
+    public String getCorreo_publicador() {
+        return correo_publicador;
+    }
+
+    public void setCorreo_publicador(String correo_publicador) {
+        this.correo_publicador = correo_publicador;
     }
 
     public void setTipoTarea(String tipoTarea) {

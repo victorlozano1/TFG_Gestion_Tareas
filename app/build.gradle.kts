@@ -45,6 +45,7 @@ dependencies {
     implementation("com.google.firebase:firebase-database")
     implementation ("com.google.android.material:material:1.5.0")
     implementation(libs.preference)
+    //Para el manejo de fotos dentro de firebase
     implementation(libs.firebase.storage)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

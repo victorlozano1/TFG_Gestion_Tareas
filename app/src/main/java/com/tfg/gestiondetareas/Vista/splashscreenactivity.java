@@ -33,19 +33,22 @@ public class splashscreenactivity extends AppCompatActivity {
             return insets;
         });
 
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(splashscreenactivity.this);
+        boolean modoOscuroActivado = preferences.getBoolean("modo_oscuro", false);
+        String idioma = preferences.getString("listaIdiomas", "no_idioma");
+        CambiarIdioma(idioma);
+        aplicarModoOscuro(modoOscuroActivado);
+
+
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
+
+
                 // Arrancamos la siguiente actividad
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(splashscreenactivity.this);
-                boolean modoOscuroActivado = preferences.getBoolean("modo_oscuro", false);
-                String idioma = preferences.getString("listaIdiomas", "no_idioma");
-
-                CambiarIdioma(idioma);
-                aplicarModoOscuro(modoOscuroActivado);
-
                 Intent mainIntent = new Intent().setClass(splashscreenactivity.this, MainActivity.class);
                 startActivity(mainIntent);
+                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 // Cerramos esta actividad para que el usuario no pueda volver a ella mediante botón de volver
                 finish();
             }
@@ -57,6 +60,8 @@ public class splashscreenactivity extends AppCompatActivity {
     }
 
     private void aplicarModoOscuro(boolean activado) {
+
+
         if (activado) {
             // Si el modo oscuro está activado, establece el tema oscuro
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -64,6 +69,7 @@ public class splashscreenactivity extends AppCompatActivity {
             // Si el modo oscuro está desactivado, establece el tema predeterminado
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
+
     }
 
     private void CambiarIdioma(String idioma) {
@@ -79,6 +85,8 @@ public class splashscreenactivity extends AppCompatActivity {
             Configuration config = new Configuration();
             config.setLocale(locale);
             getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+
         }
+
     }
 }

@@ -1,10 +1,16 @@
 package com.tfg.gestiondetareas.Vista;
 
+import static java.security.AccessController.getContext;
+
 import android.health.connect.datatypes.units.Length;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,21 +20,29 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.tfg.gestiondetareas.Modelo.Usuario;
 import com.tfg.gestiondetareas.R;
 import com.tfg.gestiondetareas.controlador.NombreTarInt;
 import com.tfg.gestiondetareas.controlador.UsuarioCallBack;
 import com.tfg.gestiondetareas.controlador.cntrCuentas;
+import com.tfg.gestiondetareas.controlador.cntrFotos;
 import com.tfg.gestiondetareas.controlador.cntrTareas;
 
 public class DetalleTareaActivity extends AppCompatActivity {
 
     private TextView tvDescripcion, tvTituloTarea, tvfechapub, tvnombrepub;
-    private String nombre, desc, fechapub, nombrepub;
+    private String nombre, desc, fechapub, nombrepub, correo_publicador;
 
     private Button btnEditarDesc;
 
+    private ImageButton btnEditar;
+
     private CheckBox chCompleta;
+
+    private ImageView ImagenCuenta;
+    private boolean completada;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,15 +63,30 @@ public class DetalleTareaActivity extends AppCompatActivity {
         tvTituloTarea=findViewById(R.id.tvNombreTarea);
         tvfechapub = findViewById(R.id.tvFechaPub);
         tvnombrepub = findViewById(R.id.tvPublicadorDato);
+
         btnEditarDesc = findViewById(R.id.btnEditarTarea);
+        btnEditar = findViewById(R.id.btnEditar);
+        btnEditar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btnEditarDesc.setVisibility(View.VISIBLE);
+                chCompleta.setEnabled(true);
+                tvDescripcion.setEnabled(true);
+            }
+        });
         btnEditarDesc.setOnClickListener(v->aplicarCambiosTarea());
         chCompleta = findViewById(R.id.chCompletada);
+        ImagenCuenta = findViewById(R.id.imgPfp);
+        correo_publicador = getIntent().getStringExtra("Correo_publicador");
         comprobarPropTarea();
+
 
         nombre = getIntent().getStringExtra("NombreTareaDetalle");
         desc = getIntent().getStringExtra("DescripcionTareaDetalle");
         fechapub = getIntent().getStringExtra("FechaPublicacionDetalle");
         nombrepub = getIntent().getStringExtra("NombrePublicadorDetalle");
+        completada = getIntent().getBooleanExtra("Completada", false);
+        CargarFotoPublicador();
 
 
         //Inserta los textos
@@ -77,21 +106,34 @@ public class DetalleTareaActivity extends AppCompatActivity {
         usuarioLogado.recogerUsuarioLogado(new UsuarioCallBack() {
             @Override
             public void onUsuarioRecogido(Usuario usuario) {
-                String nombre_usuario = usuario.getNombre();
+                String correo_usuario = usuario.getCorreo_electronico();
 
-              boolean esProp = prop.esPropietario(nombre_usuario, tvnombrepub.getText().toString());
+
+              boolean esProp = prop.esPropietario(correo_usuario, correo_publicador);
 
               if(esProp) {
 
                   //Comprueba si esta consultando una tarea que esta completada, para que no pueda editarla nuevamente
-                  btnEditarDesc.setEnabled(true);
-                  tvDescripcion.setEnabled(true);
-                  chCompleta.setEnabled(true);
+                  if(completada) {
+                      btnEditar.setVisibility(View.INVISIBLE);
+                      chCompleta.setVisibility(View.INVISIBLE);
+                      btnEditarDesc.setVisibility(View.INVISIBLE);
+
+                  }
+
+                  else {
+
+                      btnEditar.setVisibility(View.VISIBLE);
+                      chCompleta.setVisibility(View.VISIBLE);
+                      btnEditarDesc.setVisibility(View.INVISIBLE);
+
+
+                  }
 
 
                }
                  else {
-
+                  btnEditar.setVisibility(View.INVISIBLE);
                   btnEditarDesc.setVisibility(View.INVISIBLE);
                   chCompleta.setVisibility(View.INVISIBLE);
                   tvDescripcion.setEnabled(false);
@@ -100,7 +142,9 @@ public class DetalleTareaActivity extends AppCompatActivity {
             }
         });
 
-              }
+    }
+
+
 
 
 
@@ -130,7 +174,33 @@ public class DetalleTareaActivity extends AppCompatActivity {
            }
 
            Toast.makeText(this, R.string.ToastDescModificada, Toast.LENGTH_SHORT).show();
+           btnEditarDesc.setVisibility(View.INVISIBLE);
+           chCompleta.setEnabled(false);
+           tvDescripcion.setEnabled(false);
        }
+    }
+
+    private void CargarFotoPublicador() {
+        cntrFotos foto = new cntrFotos();
+        Log.i("Correofotillo", correo_publicador);
+        foto.obtenerFotoUsuario(correo_publicador, new cntrFotos.FotoCallBack() {
+            @Override
+            public void onFotoObtenida(Uri uri) {
+
+                    RequestOptions options = new RequestOptions().circleCrop();
+                    Glide.with(DetalleTareaActivity.this).load(uri).apply(options).into(ImagenCuenta);
+
+            }
+
+            @Override
+            public void onFotoNoEncontrada() {
+                Uri uri = Uri.parse("android.resource://" + getResources().getResourcePackageName(R.drawable.img) + '/' + getResources().getResourceTypeName(R.drawable.img) + '/' + getResources().getResourceEntryName(R.drawable.img));
+
+                    RequestOptions options = new RequestOptions().circleCrop();
+                    Glide.with(DetalleTareaActivity.this).load(uri).apply(options).into(ImagenCuenta);
+                }
+
+        });
     }
 
 

@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,9 +25,12 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.ValueEventListener;
 import com.tfg.gestiondetareas.Modelo.Tarea;
+import com.tfg.gestiondetareas.Modelo.Usuario;
 import com.tfg.gestiondetareas.R;
 import com.tfg.gestiondetareas.controlador.ListenersCallBack;
 import com.tfg.gestiondetareas.controlador.TareasCallBack;
+import com.tfg.gestiondetareas.controlador.UsuarioCallBack;
+import com.tfg.gestiondetareas.controlador.cntrCuentas;
 import com.tfg.gestiondetareas.controlador.cntrTareas;
 
 import java.util.ArrayList;
@@ -123,7 +127,8 @@ public class vistaFragmentTareas extends Fragment {
             consulta.retornarListaTareas(new ListenersCallBack() {
                 @Override
                 public void listenerObtenido(ValueEventListener listener) {
-
+                    consulta.removerEventListener(listenerglobal);
+                    listenerglobal = listener;
                 }
             }, new TareasCallBack() {
                 @Override
@@ -146,6 +151,8 @@ public class vistaFragmentTareas extends Fragment {
                 consulta.retornarListaTareas(new ListenersCallBack() {
                     @Override
                     public void listenerObtenido(ValueEventListener listener) {
+                        consulta.removerEventListener(listenerglobal);
+                        listenerglobal = listener;
 
                     }
                 }, new TareasCallBack() {
@@ -164,6 +171,8 @@ public class vistaFragmentTareas extends Fragment {
                 consulta.retornarListaTareas(new ListenersCallBack() {
                     @Override
                     public void listenerObtenido(ValueEventListener listener) {
+                        consulta.removerEventListener(listenerglobal);
+                        listenerglobal = listener;
 
                     }
                 }, new TareasCallBack() {
@@ -172,6 +181,7 @@ public class vistaFragmentTareas extends Fragment {
                         listaTareas = tareas;
                         Adaptador = new TareaAdapter(listaTareas, view.getContext());
                         mostrarRecyclerView();
+                        consulta.TraducirTipoTarea(filtro);
                         consulta.OrdenarPorTipoTarea(filtro, listaTareas, Adaptador);
                     }
                 });
@@ -203,12 +213,34 @@ public class vistaFragmentTareas extends Fragment {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 // Obtiene la posición del elemento deslizado
                 int position = viewHolder.getAdapterPosition();
+                cntrCuentas usuario = new cntrCuentas();
                 cntrTareas tar = new cntrTareas(view.getContext());
-                Tarea tarDeslizada = listaTareas.get(position);
-                String IdTarea = tarDeslizada.getNombre();
-                tar.BorrarTarea(IdTarea);
 
+                usuario.recogerUsuarioLogado(new UsuarioCallBack() {
+                    @Override
+                    public void onUsuarioRecogido(Usuario usuario) {
+                        String correo = usuario.getCorreo_electronico();
+                        boolean EsProp = tar.esPropietario(correo, listaTareas.get(position).getCorreo_publicador());
 
+                        if (EsProp) {
+                            Tarea tarDeslizada = listaTareas.get(position);
+                            String IdTarea = tarDeslizada.getNombre();
+
+                            // Primero elimina la tarea del origen de datos
+                            listaTareas.remove(position);
+                            // Luego notifica al adapter sobre el cambio
+                            Adaptador.notifyItemRemoved(position);
+
+                            // Por último, realiza la operación de borrado en la base de datos o backend
+                            tar.BorrarTarea(IdTarea);
+
+                        } else {
+                            // Si el usuario no es propietario, vuelve a insertar el item en la lista
+                            Adaptador.notifyItemChanged(position);
+                            Toast.makeText(getContext(), R.string.ToastBorrarTarea, Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
             }
 
 
@@ -246,6 +278,7 @@ public class vistaFragmentTareas extends Fragment {
                 editor.putString("filtroguardado", TipoTarea);
                 editor.apply();
             }
+            TipoTarea = consulta.TraducirTipoTarea(TipoTarea);
 
             consulta.OrdenarPorTipoTarea(TipoTarea, listaTareas, Adaptador);
 
@@ -261,6 +294,7 @@ public class vistaFragmentTareas extends Fragment {
                 editor.putString("filtroguardado", TipoTarea);
                 editor.apply();
             }
+            TipoTarea = consulta.TraducirTipoTarea(TipoTarea);
 
             consulta.OrdenarPorTipoTarea(TipoTarea, listaTareas, Adaptador);
 
@@ -277,6 +311,7 @@ public class vistaFragmentTareas extends Fragment {
                 editor.putString("filtroguardado", TipoTarea);
                 editor.apply();
             }
+            TipoTarea = consulta.TraducirTipoTarea(TipoTarea);
 
 
             consulta.OrdenarPorTipoTarea(TipoTarea, listaTareas, Adaptador);

@@ -28,7 +28,7 @@
     <string name="opcFragmentCuenta">Cuenta</string>
     <string name="opcFragmentAjustes">Ajustes</string>
     <string name="ModoOscuroPreference">Habilitar modo oscuro</string>
-    <string name="ReiniciarApp">Debe reiniciar la aplicación para aplicar el tema</string>
+    <string name="ReiniciarApp">Debe reiniciar la aplicación para aplicar los cambios</string>
     <string name="NombreUsuarioPerfil">Nombre de usuario</string>
     <string name="tituloFragmentPerfil">Perfil</string>
     <string name="toastInicioSesionExitoso">Inicio de sesión exitoso</string>
@@ -38,8 +38,6 @@
     </string-array>
     <string name="tvSeleccionarIdioma">Seleccionar idioma</string>
     <string name="btnAplicarCambios">Aplicar cambios</string>
-    <string name="toastEditarNombreVacio">No puede dejar el nombre de usuario vacio</string>
-    <string name="ToastEsFechaHoy">No se puede cambiar el nombre del usuario hasta dentro de 1 día</string>
     <string name="ToastTareaNueva">Se ha añadido la tarea correctamente</string>
     <string name="ToastDescVacio">La descripción no puede estar vacia</string>
     <string name="ToastDescModificada">Se ha modificado la descripcion</string>
@@ -53,4 +51,10 @@
     <string name="opcTipo">Tipo</string>
     <string name="opcEstado">Estado</string>
     <string name="opcCompletas">Completada</string>
+    <string name="preferenceCategoryIdioma">Idioma</string>
+    <string name="preferenceCategoryVisualizacion">Visualización</string>
+    <string name="preferenceCategoryFiltrado">Filtrado</string>
+    <string name="ToastEnviarTarea">Por favor, rellene todos los campos para enviar la tarea</string>
+    <string name="ToastPermisos">La aplicación no tiene permisos para acceder a los archivos multimedia, por favor, ve a los ajustes de privacidad</string>
+    <string name="ToastBorrarTarea">No puede borrar la tarea porque no es el propietario de ella</string>
 </resources>

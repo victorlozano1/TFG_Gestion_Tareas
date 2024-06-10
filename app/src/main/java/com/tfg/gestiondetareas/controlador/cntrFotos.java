@@ -36,6 +36,7 @@ public class cntrFotos {
             // Maneja la excepción cuando el archivo no existe
             callBack.onFotoNoEncontrada();
         });
+
     }
 
 

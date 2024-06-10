@@ -72,7 +72,7 @@ public class crearTareaActivity extends AppCompatActivity {
 
 
         if(nombreTarea.getText().toString().isEmpty() || descripcionTarea.getText().toString().isEmpty() || opcSeleccionada==null) {
-            Toast.makeText(this, "Por favor, rellene todos los campos para enviar la tarea", Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(), R.string.ToastEnviarTarea, Toast.LENGTH_LONG).show();
         } else {
             TipoTarea = opcSeleccionada.getText().toString();
 

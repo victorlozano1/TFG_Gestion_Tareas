@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="Visualización">
-    <SwitchPreference
-        android:defaultValue="false"
-        android:key="modo_oscuro"
-        android:title="@string/ModoOscuroPreference" />
+    <PreferenceCategory android:title="@string/preferenceCategoryVisualizacion">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="modo_oscuro"
+            android:title="@string/ModoOscuroPreference" />
     </PreferenceCategory>
 
 
-    <PreferenceCategory
-        android:title="Idioma">
+    <PreferenceCategory android:title="@string/preferenceCategoryIdioma">
 
         <ListPreference
             android:defaultValue="1"
@@ -20,7 +19,7 @@
             android:title="@string/tvSeleccionarIdioma" />
 
     </PreferenceCategory>
-    <PreferenceCategory android:title="Filtrado">
+    <PreferenceCategory android:title="@string/preferenceCategoryFiltrado">
 
         <SwitchPreference
             android:defaultValue="false"

@@ -6,8 +6,8 @@
     <string name="btnSalir">Exit application</string>
     <string name="btnRegistrar">Register account</string>
     <string name="tvCrearCuenta">"Create your account "</string>
-    <string name="toastRegIncorrecto">" You must fill out all fields to register"</string>
-    <string name="edtCorreo">" Email"</string>
+    <string name="toastRegIncorrecto">You must fill out all fields to register</string>
+    <string name="edtCorreo"> Email"</string>
     <string name="toastiniciosesincorrecto">You must fill out the fields to be able to log in.</string>
     <string name="toastCorreoEnUso">This email is already registered</string>
     <string name="HintNombreNuevaTarea">Name of the homework</string>
@@ -24,9 +24,9 @@
     <string name="opcFragmentCuenta">Account</string>
     <string name="opcFragmentAjustes">Settings</string>
     <string name="ModoOscuroPreference">Enable dark mode</string>
-    <string name="ReiniciarApp">" You must restart the application to apply the theme"</string>
-    <string name="NombreUsuarioPerfil">" Username:"</string>
-    <string name="tituloFragmentPerfil">"Profile "</string>
+    <string name="ReiniciarApp">You must restart the application to apply the changes</string>
+    <string name="NombreUsuarioPerfil"> Username:</string>
+    <string name="tituloFragmentPerfil">Profile</string>
     <string name="btnIniciarSesion">Log in</string>
     <string name="btnCancelar">Cancel</string>
     <string name="toastErrorInicioSesion">Login error: incorrect email or password</string>
@@ -37,8 +37,6 @@
     </string-array>
     <string name="tvSeleccionarIdioma">Select language</string>
     <string name="btnAplicarCambios">Apply changes</string>
-    <string name="toastEditarNombreVacio">You cannot leave the username empty</string>
-    <string name="ToastEsFechaHoy">Username cannot be changed for 1 day</string>
     <string name="ToastTareaNueva">Task added successfully</string>
     <string name="ToastDescVacio">Description cannot be empty</string>
     <string name="ToastDescModificada">The description has been modified</string>
@@ -52,4 +50,10 @@
     <string name="opcTipo">Type</string>
     <string name="opcEstado">Status</string>
     <string name="opcCompletas">Completed</string>
+    <string name="preferenceCategoryIdioma">Language</string>
+    <string name="preferenceCategoryVisualizacion">Visualization</string>
+    <string name="preferenceCategoryFiltrado">Filtered</string>
+    <string name="ToastEnviarTarea">Please fill out all the fields to send the task</string>
+    <string name="ToastPermisos">The application does not have permissions to access media files, please go to privacy settings</string>
+    <string name="ToastBorrarTarea">You cannot delete the task because you are not the owner of it</string>
 </resources>

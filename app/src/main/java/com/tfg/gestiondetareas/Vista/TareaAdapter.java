@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -45,8 +46,6 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.ViewHolder> 
         holder.publicador.setText(listaTareas.get(position).getNombre_publicador());
 
 
-
-
         //Cuando pulsa click sobre un cardview, se dirige a una activity donde muestra en detalle la tarea
         cv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,6 +58,8 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.ViewHolder> 
                 intent.putExtra("DescripcionTareaDetalle", listaTareas.get(position).getDescripcion());
                 intent.putExtra("FechaPublicacionDetalle", listaTareas.get(position).getFecha_publicacion());
                 intent.putExtra("NombrePublicadorDetalle",listaTareas.get(position).getNombre_publicador());
+                intent.putExtra("Correo_publicador", listaTareas.get(position).getCorreo_publicador());
+                intent.putExtra("Completada", listaTareas.get(position).isCompletada());
                 contexto.startActivity(intent);
 
             }
@@ -79,12 +80,14 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.ViewHolder> 
 
         TextView Tarea, Fecha, publicador;
 
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             Tarea=itemView.findViewById(R.id.tvNomTarea);
             Fecha=itemView.findViewById(R.id.tvFecha);
             publicador=itemView.findViewById(R.id.tvPublicador);
             cv=itemView.findViewById(R.id.clayCardView);
+
 
         }
 
