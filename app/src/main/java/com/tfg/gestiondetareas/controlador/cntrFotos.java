@@ -32,18 +32,7 @@ public class cntrFotos {
         photoRef.getDownloadUrl().addOnSuccessListener(uri -> {
             callBack.onFotoObtenida(uri);
         }).addOnFailureListener(exception -> {
-            try {
-                throw exception;
-            } catch (StorageException storageException) {
-                int errorCode = storageException.getErrorCode();
-                if (errorCode == StorageException.ERROR_OBJECT_NOT_FOUND) {
-                    Log.i("FirebaseStorage", "El usuario no tiene foto de perfil, cargando foto por defecto.");
-                } else {
-                    Log.e("FirebaseStorage", "Error de almacenamiento: " + storageException.getMessage());
-                }
-            } catch (Exception e) {
-                Log.e("FirebaseStorage", "Error inesperado: " + e.getMessage());
-            }
+            Log.i("fotoSinEncontrar", "No se ha encontrado una foto, utilizando foto por defecto");
             callBack.onFotoNoEncontrada();
         });
     }
