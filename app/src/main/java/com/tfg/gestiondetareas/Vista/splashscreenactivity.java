@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -65,9 +66,12 @@ public class splashscreenactivity extends AppCompatActivity {
         if (activado) {
             // Si el modo oscuro está activado, establece el tema oscuro
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+
+
         } else {
-            // Si el modo oscuro está desactivado, establece el tema predeterminado
+            // En caso contrario establece el tema por defecto
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
         }
 
     }

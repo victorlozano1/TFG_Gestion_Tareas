@@ -118,6 +118,7 @@ public class DetalleTareaActivity extends AppCompatActivity {
                       btnEditar.setVisibility(View.INVISIBLE);
                       chCompleta.setVisibility(View.INVISIBLE);
                       btnEditarDesc.setVisibility(View.INVISIBLE);
+                      findViewById(R.id.tvCompletado).setVisibility(View.VISIBLE);
 
                   }
 
@@ -170,6 +171,7 @@ public class DetalleTareaActivity extends AppCompatActivity {
 
            if(chCompleta.isChecked()) {
                btnEditar.setVisibility(View.INVISIBLE);
+               findViewById(R.id.tvCompletado).setVisibility(View.VISIBLE);
                boolean completo = chCompleta.isChecked();
                editar.marcarTareaComoCompleta(completo, tvTituloTarea.getText().toString());
            }
@@ -183,7 +185,6 @@ public class DetalleTareaActivity extends AppCompatActivity {
 
     private void CargarFotoPublicador() {
         cntrFotos foto = new cntrFotos();
-        Log.i("Correofotillo", correo_publicador);
         foto.obtenerFotoUsuario(correo_publicador, new cntrFotos.FotoCallBack() {
             @Override
             public void onFotoObtenida(Uri uri) {

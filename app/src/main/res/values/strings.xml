@@ -57,4 +57,7 @@
     <string name="ToastPermisos">The application does not have permissions to access media files, please go to privacy settings</string>
     <string name="ToastBorrarTarea">You cannot delete the task because you are not the owner of it</string>
     <string name="toastPermisoDennied">Permissions have been denied</string>
+    <string name="tareaCompletada">This task has been completed</string>
+    <string name="toastContraseniaMinima">The password must be at least 6 characters</string>
+
 </resources>

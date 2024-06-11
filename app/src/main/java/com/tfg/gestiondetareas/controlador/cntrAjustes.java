@@ -59,12 +59,31 @@ public class cntrAjustes extends PreferenceFragmentCompat {
         }
 
         ListPreference preferenciaIdioma = findPreference("listaIdiomas");
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+        int selIdioma = preferences.getInt("opcSelIdioma", -1);
+
+        if(selIdioma!=-1) {
+            preferenciaIdioma.setValueIndex(selIdioma);
+        }
+
 
         preferenciaIdioma.setOnPreferenceChangeListener((preference, newValue) -> {
+
             String idioma = (String) newValue;
-            CambiarIdioma(idioma);
+            int sel = -1;
+
+            CharSequence[] entryValues = preferenciaIdioma.getEntryValues();
+            for (int i = 0; i < entryValues.length; i++) {
+                if (entryValues[i].equals(idioma)) {
+                    sel = i;
+                    break;
+                }
+            }
+
+            CambiarIdioma(idioma, sel);
             return true;
         });
+
 
 
     }
@@ -89,11 +108,12 @@ public class cntrAjustes extends PreferenceFragmentCompat {
 
     }
 
-    private void CambiarIdioma(String Idioma) {
+    private void CambiarIdioma(String Idioma, int sel) {
         // Cambiar el idioma de la aplicación
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("Idioma", Idioma);
+        editor.putInt("opcSelIdioma", sel);
         editor.apply();
         Toast.makeText(getContext() , R.string.ReiniciarApp, Toast.LENGTH_SHORT).show();
 

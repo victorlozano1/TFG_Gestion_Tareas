@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -88,6 +89,11 @@ public class cntrCuentas {
                         if (task.getException() instanceof FirebaseAuthUserCollisionException) {
                             // El correo electrónico ya está en uso por otra cuenta
                             Toast.makeText(contexto, R.string.toastCorreoEnUso, Toast.LENGTH_SHORT).show();
+
+                        }
+
+                        if(task.getException() instanceof FirebaseAuthWeakPasswordException) {
+                            Toast.makeText(contexto, R.string.toastContraseniaMinima , Toast.LENGTH_SHORT).show();
 
                         }
 

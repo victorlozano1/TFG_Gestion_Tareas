@@ -28,7 +28,7 @@ import com.tfg.gestiondetareas.controlador.UsuarioCallBack;
 import com.tfg.gestiondetareas.controlador.cntrCuentas;
 import com.tfg.gestiondetareas.controlador.cntrFotos;
 
-public class vistaFragmentCuenta extends Fragment {
+public class vistaFragmentCuenta extends Fragment implements ActivityCompat.OnRequestPermissionsResultCallback{
 
     private static final int REQUEST_CODE_PERMISSION = 1;
     private static final int REQUEST_CODE_PICK_FILE = 2;
@@ -105,10 +105,8 @@ public class vistaFragmentCuenta extends Fragment {
             }
         }
 
-
-
-
     }
+
 
 
 

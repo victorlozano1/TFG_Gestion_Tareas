@@ -93,6 +93,25 @@ public class vistaFragmentTareas extends Fragment {
 
             if(filtro_seleccionado.equals("SinFiltro")) {
                 Log.i("sinTarea", "El usuario no tenia filtrado por ningun tipo de tarea");
+
+                cntrTareas consulta = new cntrTareas();
+                consulta.retornarListaTareas(new ListenersCallBack() {
+                    @Override
+                    public void listenerObtenido(ValueEventListener listener) {
+
+
+
+
+                    }
+                },new TareasCallBack() {
+                    @Override
+                    public void onTareasLoaded(ArrayList<Tarea> tareas) {
+                        listaTareas = tareas;
+                        Adaptador = new TareaAdapter(listaTareas, view.getContext());
+                        mostrarRecyclerView();
+                    }
+                });
+
             }
 
             else {
@@ -207,7 +226,7 @@ public class vistaFragmentTareas extends Fragment {
         rvTareas.setAdapter(Adaptador);
 
         //Añade el evento de deslizar para borrar
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0,  ItemTouchHelper.RIGHT) {
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 return false;
@@ -215,6 +234,7 @@ public class vistaFragmentTareas extends Fragment {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
                 // Obtiene la posición del elemento deslizado
                 int position = viewHolder.getAdapterPosition();
                 cntrCuentas usuario = new cntrCuentas();
@@ -232,24 +252,106 @@ public class vistaFragmentTareas extends Fragment {
 
                             // Primero elimina la tarea del origen de datos
                             listaTareas.remove(position);
-                            // Luego notifica al adapter sobre el cambio
+                            // Luego notifica al adaptador sobre el cambio
                             Adaptador.notifyItemRemoved(position);
 
                             // Por último, realiza la operación de borrado en la base de datos o backend
                             tar.BorrarTarea(IdTarea);
 
                         } else {
-                            // Si el usuario no es propietario, vuelve a insertar el item en la lista
-                            Adaptador.notifyItemChanged(position);
+                            // Si el usuario no es propietario, recupera la lista tal como estaba ordenada
+                            cntrTareas consulta = new cntrTareas();
+                            if(filtroActual != null) {
+
+
+
+
+                                if(filtroActual.equals("Do not filter") || filtroActual.equals("No filtrar")) {
+                                    consulta.retornarListaTareas(new ListenersCallBack() {
+                                        @Override
+                                        public void listenerObtenido(ValueEventListener listener) {
+
+
+
+
+                                        }
+                                    },new TareasCallBack() {
+                                        @Override
+                                        public void onTareasLoaded(ArrayList<Tarea> tareas) {
+                                            listaTareas = tareas;
+                                            Adaptador = new TareaAdapter(listaTareas, view.getContext());
+                                            mostrarRecyclerView();
+                                        }
+                                    });
+
+
+                                }
+
+                                if(filtroActual.equals("Completed") || filtroActual.equals("Completada")) {
+                                    consulta.retornarListaTareas(new ListenersCallBack() {
+                                        @Override
+                                        public void listenerObtenido(ValueEventListener listener) {
+
+
+
+                                        }
+                                    }, new TareasCallBack() {
+                                        @Override
+                                        public void onTareasLoaded(ArrayList<Tarea> tareas) {
+                                            listaTareas = tareas;
+                                            Adaptador = new TareaAdapter(listaTareas, view.getContext());
+                                            mostrarRecyclerView();
+                                            consulta.ordenarPorCompletadas(listaTareas, Adaptador);
+                                        }
+                                    });
+
+                                }
+
+                                else {
+
+                                    consulta.retornarListaTareas(new ListenersCallBack() {
+                                        @Override
+                                        public void listenerObtenido(ValueEventListener listener) {
+
+                                        }
+                                    }, new TareasCallBack() {
+                                        @Override
+                                        public void onTareasLoaded(ArrayList<Tarea> tareas) {
+                                            listaTareas = tareas;
+                                            Adaptador = new TareaAdapter(listaTareas, view.getContext());
+                                            mostrarRecyclerView();
+                                            consulta.OrdenarPorTipoTarea(filtroActual, listaTareas, Adaptador);
+                                        }
+                                    });
+
+                                }
+
+                            }
+
+                            else {
+                                consulta.retornarListaTareas(new ListenersCallBack() {
+                                    @Override
+                                    public void listenerObtenido(ValueEventListener listener) {
+
+
+
+
+                                    }
+                                },new TareasCallBack() {
+                                    @Override
+                                    public void onTareasLoaded(ArrayList<Tarea> tareas) {
+                                        listaTareas = tareas;
+                                        Adaptador = new TareaAdapter(listaTareas, view.getContext());
+                                        mostrarRecyclerView();
+                                    }
+                                });
+                            }
+
                             Toast.makeText(getContext(), R.string.ToastBorrarTarea, Toast.LENGTH_LONG).show();
-
-
                         }
                     }
                 });
             }
-
-
         };
 
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(rvTareas);
@@ -285,7 +387,7 @@ public class vistaFragmentTareas extends Fragment {
                 editor.apply();
             }
             TipoTarea = consulta.TraducirTipoTarea(TipoTarea);
-            filtroActual = TipoTarea;
+
 
             String  TipoTareaActual = consulta.TraducirTipoTarea(TipoTarea);
 
@@ -305,6 +407,9 @@ public class vistaFragmentTareas extends Fragment {
                     consulta.OrdenarPorTipoTarea(TipoTareaActual, listaTareas, Adaptador);
                 }
             });
+
+            filtroActual = TipoTareaActual;
+            Log.i("filtroActual", filtroActual);
 
 
         }
@@ -321,7 +426,7 @@ public class vistaFragmentTareas extends Fragment {
             }
             TipoTarea = consulta.TraducirTipoTarea(TipoTarea);
 
-            filtroActual = TipoTarea;
+
             String  TipoTareaActual = consulta.TraducirTipoTarea(TipoTarea);
 
             consulta.retornarListaTareas(new ListenersCallBack() {
@@ -342,6 +447,9 @@ public class vistaFragmentTareas extends Fragment {
             });
 
 
+            filtroActual = TipoTareaActual;
+            Log.i("filtroActual", filtroActual);
+
 
         }
         if(item.getItemId()==R.id.opcMenuOcio){
@@ -357,7 +465,7 @@ public class vistaFragmentTareas extends Fragment {
                 editor.apply();
             }
 
-            filtroActual = TipoTarea;
+
           String  TipoTareaActual = consulta.TraducirTipoTarea(TipoTarea);
 
             consulta.retornarListaTareas(new ListenersCallBack() {
@@ -376,6 +484,9 @@ public class vistaFragmentTareas extends Fragment {
                     consulta.OrdenarPorTipoTarea(TipoTareaActual, listaTareas, Adaptador);
                 }
             });
+
+            filtroActual = TipoTareaActual;
+            Log.i("filtroActual", filtroActual);
 
 
 
@@ -409,6 +520,9 @@ public class vistaFragmentTareas extends Fragment {
                 }
             });
 
+            filtroActual = TareasCompletadas;
+            Log.i("filtroActual", filtroActual);
+
 
 
         }
@@ -424,7 +538,7 @@ public class vistaFragmentTareas extends Fragment {
                 editor.apply();
             }
 
-            filtroActual = TipoTarea;
+
             consulta.retornarListaTareas(new ListenersCallBack() {
                 @Override
                 public void listenerObtenido(ValueEventListener listener) {
@@ -442,6 +556,7 @@ public class vistaFragmentTareas extends Fragment {
                 }
             });
 
+            filtroActual = TipoTarea;
 
 
         }

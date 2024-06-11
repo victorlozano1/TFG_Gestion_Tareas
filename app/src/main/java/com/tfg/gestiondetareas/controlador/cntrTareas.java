@@ -86,6 +86,7 @@ public class cntrTareas {
         // Remover el listener anterior si existe
         if (listenerPorDefecto != null) {
             tareasRef.removeEventListener(listenerPorDefecto);
+            Log.i("ListenerBorrado", "Listener borrado correctamente");
         }
 
         // Definir el nuevo listener
