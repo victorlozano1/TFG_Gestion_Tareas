@@ -12,7 +12,6 @@
     <PreferenceCategory android:title="@string/preferenceCategoryIdioma">
 
         <ListPreference
-            android:defaultValue="1"
             android:entries="@array/ArraySelecciónIdioma"
             android:entryValues="@array/ArraySelecciónIdioma"
             android:key="listaIdiomas"
